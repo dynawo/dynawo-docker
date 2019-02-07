@@ -75,10 +75,10 @@ export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install\n\
 \n\
 export DYNAWO_LOCALE=en_GB\n\
 export USE_ADEPT=YES\n\
-export RESULTS_SHOW=true\n\
+export RESULTS_SHOW=false\n\
 export BROWSER=xdg-open\n\
 \n\
-export NB_PROCESSORS_USED=$(($(nproc --all)/2))\n\
+export NB_PROCESSORS_USED=1\n\
 \n\
 export BUILD_TYPE=Release\n\
 export CXX11_ENABLED=YES\n\
