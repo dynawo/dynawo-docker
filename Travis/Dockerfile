@@ -126,6 +126,7 @@ RUN dnf upgrade -y \
   automake \
   python-devel \
   zlib-devel \
+  gcovr \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
