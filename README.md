@@ -34,7 +34,7 @@ We provide this repository to ease users with [Dyna&omega;o' installation](https
 <a name="users"></a>
 ## Users image
 
-Under the [Users](Users) folder we provide a Dockerfile to build an image integrating the latest Dyna&omega;o version. The user can launch the following commands to build the image, create the Docker container and connect to it.
+Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) folder we provide a Dockerfile to build an image integrating the latest Dyna&omega;o version. The user can launch the following commands to build the image, create the Docker container and connect to it.
 
 ``` bash
 $> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
@@ -50,17 +50,32 @@ On inside the user can use the `dynawo` alias inside the container and launch:
 $> dynawo nrt
 ```
 
-This image will soon be available on [Docker Hub](https://hub.docker.com).
+This image is also be available on [Docker Hub](https://hub.docker.com/r/dynawo/dynawo). Then if you already have docker installed on your machine you directly execute the following command:
+``` bash
+docker run -it dynawo/dynawo
+```
+
+If you want to share your current directory you can launch:
+``` bash
+docker run -it -v $PWD:/home/dynawo_user/dynawo/SharedFolder dynawo/dynawo
+```
+
+**Warning** You will be able to see the files in SharedFolder but not modify them or create new one from inside the container. If you want to create or modify files you should do it from your own machine. You can then use `cp -r Folder ~` in the container to use it.
+
+Inside the container you can then launch:
+``` bash
+$> dynawo nrt
+```
 
 <a name="soon"></a>
 ## Soon available
 
-We will soon provide an image for developers, especially those on **MacOS** or **Windows** not enabled to compile the code on their machine for the moment. This image will provide developers a way to have a complete environment to compile the code 
+We will soon provide an image for developers, especially those on **MacOS** or **Windows** not enabled to compile the code on their machine for the moment. This image will provide developers a way to have a complete environment to compile the code
 
 <a name="license"></a>
 ## License
 
-Dyna&omega;o is licensed under the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at http://mozilla.org/MPL/2.0. You can also see the [LICENSE](LICENSE.txt) file for more information.
+Dyna&omega;o is licensed under the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, you can obtain one at http://mozilla.org/MPL/2.0. You can also see the [LICENSE](https://github.com/dynawo/dynawo-docker/blob/master/LICENSE.txt) file for more information.
 
 See [here](https://github.com/dynawo/dynawo#license) for external libraries licenses.
 
