@@ -50,7 +50,6 @@ RUN dnf upgrade -y \
   python-pip \
   python-psutil \
   boost-devel \
-  lcov \
   gtest-devel \
   gmock-devel \
   xz \
@@ -128,6 +127,7 @@ RUN dnf upgrade -y \
   python-devel \
   zlib-devel \
   gcovr \
+  lcov \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
