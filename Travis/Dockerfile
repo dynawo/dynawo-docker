@@ -46,6 +46,7 @@ RUN dnf upgrade -y \
   perl-Digest-MD5 \
   vim \
   gcovr \
+  lcov \
   python-pip \
   python-psutil \
   boost-devel \
