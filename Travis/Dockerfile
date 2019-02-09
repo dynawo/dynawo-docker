@@ -60,7 +60,7 @@ RUN dnf upgrade -y \
 && rm -rf /var/cache/dnf/*
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
-&& chown -R ${USER} /opt
+&& chown -R ${USER} /opt \
 && gem install coveralls-lcov
 
 USER ${USER}
