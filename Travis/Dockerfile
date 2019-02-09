@@ -55,11 +55,13 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
+  gem \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt
+&& gem install coveralls-lcov
 
 USER ${USER}
 
@@ -126,7 +128,6 @@ RUN dnf upgrade -y \
   automake \
   python-devel \
   zlib-devel \
-  gcovr \
   lcov \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
