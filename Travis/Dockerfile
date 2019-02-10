@@ -55,13 +55,11 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
-  gem \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
-&& chown -R ${USER} /opt \
-&& gem install coveralls-lcov
+&& chown -R ${USER} /opt
 
 USER ${USER}
 
@@ -129,11 +127,13 @@ RUN dnf upgrade -y \
   python-devel \
   zlib-devel \
   lcov \
+  gem \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
-&& chown -R ${USER} /opt
+&& chown -R ${USER} /opt \
+&& gem install coveralls-lcov
 
 COPY --from=builder /opt/OpenModelica /opt/OpenModelica
 
