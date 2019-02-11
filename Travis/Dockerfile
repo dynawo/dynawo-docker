@@ -100,6 +100,14 @@ FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 ENV USER "dynawo_travis"
+ENV ADEPT_VERSION "1.1"
+ENV SUITE_SPARSE_VERSION "4.5.4"
+ENV SUNDIALS_VERSION "2.7.0"
+ENV XERCESC_VERSION "3.2.2"
+ENV XERCESC_VERSION_SHORT "3"
+ENV CPPLINT_VERSION "1.3.0"
+ENV JQUERY_VERSION "1.3.2"
+ENV FLOT_VERSION "0.6.0"
 
 RUN dnf upgrade -y \
 && dnf update -y \
@@ -129,7 +137,14 @@ RUN dnf upgrade -y \
   lcov \
   gem \
 && dnf clean all \
-&& rm -rf /var/cache/dnf/*
+&& rm -rf /var/cache/dnf/* \
+&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -o /opt/adept-${ADEPT_VERSION}.tar.gz \
+&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION}.tar.gz -o /opt/sundials-${SUNDIALS_VERSION}.tar.gz \
+&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -o /opt/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz \
+&& wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -o /opt/${JQUERY_VERSION}.tar.gz \
+&& wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -o /opt/v${FLOT_VERSION}.tar.gz \
+&& wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -o /opt/${CPPLINT_VERSION}.tar.gz \
+&& wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -o /opt/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt \
