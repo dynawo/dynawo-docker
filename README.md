@@ -48,29 +48,20 @@ $> ./connect_to_container.sh
 Once inside the container the user can use the `dynawo` alias and launch:
 
 ``` bash
-$> dynawo nrt
+dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
 
 This image is also available on [Docker Hub](https://hub.docker.com/r/dynawo/dynawo). Then if you already have docker installed on your machine you can directly execute the following command:
 ``` bash
-docker run -it dynawo/dynawo
-```
-
-If you want to share your current directory you can launch:
-``` bash
-docker run -it -v $PWD:/home/dynawo_user/dynawo/SharedFolder dynawo/dynawo
-```
-
-**Warning** You will be able to see the files in SharedFolder but not modify them or create new one from inside the container. If you want to create or modify files you should do it from your own machine. You can then use `cp -r SharedFolder ~` in the container to use it. The reason is that inside the container you are connected as dynawo_user which would not have the same Linux ID as you hence not the right to read your files. If you want you can always connect as root in the container you created with:
-
-```bash
-docker exec -it -u root CONTAINER_NAME bash
+$> docker run -it dynawo/dynawo
 ```
 
 Inside the container you can then launch as before:
 ``` bash
-$> dynawo nrt
+dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
+
+If you want to share some data from your host machine to the container you can read a complementary procedure [here](Users/Advanced.md).
 
 <a name="developer"></a>
 ## Developer Image
@@ -95,21 +86,26 @@ Now you can connect to the newly created container with:
 $> ./connect_to_container.sh
 ```
 
-You can now download and install Dyna&omega;o were you want to on your system, your home folder has been shared inside the container as the home folder of the user in the container (user with the same name uid and gid as you). For this you can use the script provided in the container and launch:
+You can now download and install Dyna&omega;o were you want to on your system, your home folder has been shared inside the container as the home folder of the user in the container (user with the same name uid and gid as you). For this you can use the script provided in the container and launch, we call MY_DYNAWO_PATH the path were you want to install Dyna&omega;o on your machine:
 
 ``` bash
-$> cd /path/on/your/system/where/you/want/dynawo
-$> /opt/install_dynawo.sh
+your_user_name@contaiderID:~$> cd MY_DYNAWO_PATH
+your_user_name@contaiderID:MY_DYNAWO_PATH$> /opt/install_dynawo.sh
 ```
 
 At the end of the script Dyna&omega;o source code is available on your machine and has been fully compiled, you can then launch:
 
 ``` bash
-$> ./myEnvDynawo.sh nrt
-$> ./myEnvDynawo.sh help
+your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> ./myEnvDynawo.sh nrt
+your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> ./myEnvDynawo.sh help
 ```
 
-For **MacOS** or **Windows** users we recommend using this solution as no toolchain is provided to compile Dyna&omega;o natively on those OS. In this approach the Docker container is used as a substitute bash, with Linux compiler, to compile the code while still being able to edit Dyna&omega;o source code natively on your machine with your favorite IDE.
+You can also add an alias in your bashrc:
+``` bash
+your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> echo "alias dynawo=$(pwd)/myEnvDynawo.sh" >> ~/.bashrc
+```
+
+For **MacOS** or **Windows** users we recommend using this solution as no toolchain is provided to compile Dyna&omega;o natively on those OS. In this approach the Docker container is used as a substitute bash, with Linux compiler, to compile the code while still being able to edit Dyna&omega;o source code natively on your machine with your favorite IDE. We also warn about the resources you allowed to the Docker deamon as it could result in very slow compilation or even failures, if it occurs we recommend to increase CPU and RAM allowed to Docker in the settings.
 
 <a name="license"></a>
 ## License
@@ -128,5 +124,5 @@ Dyna&omega;o is currently maintained by people at RTE, in case of questions or i
 
 For more information about Dyna&omega;o:
 
-* Consult [Dyna&omega;o website](https://dynawo.github.io/)
+* Consult [Dyna&omega;o website](https://dynawo.org)
 * Contact us at [rte-des-simulation-dynamique@rte-france.com](mailto:rte-des-simulation-dynamique@rte-france.com)
