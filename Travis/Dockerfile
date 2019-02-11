@@ -138,13 +138,13 @@ RUN dnf upgrade -y \
   gem \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
-&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -o /opt/adept-${ADEPT_VERSION}.tar.gz \
-&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION}.tar.gz -o /opt/sundials-${SUNDIALS_VERSION}.tar.gz \
-&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -o /opt/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz \
-&& wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -o /opt/${JQUERY_VERSION}.tar.gz \
-&& wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -o /opt/v${FLOT_VERSION}.tar.gz \
-&& wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -o /opt/${CPPLINT_VERSION}.tar.gz \
-&& wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -o /opt/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz
+&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
+&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
+&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
+&& wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
+&& wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
+&& wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -P /opt \
+&& wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt \
