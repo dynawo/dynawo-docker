@@ -72,3 +72,15 @@ You can always log as the `root` user in the container to install new packages f
 $> docker exec -u root -it dynawo_container bash
 root@contaiderID:dynawo#> dnf install ...
 ```
+
+# Scp solution in container
+
+In the container you can also you use scp to send files to your host machine:
+``` bash
+$> ip a | grep -w inet | grep -v 127.0.0.1
+...
+inet 192.168.0.10  netmask 255.255.255.0 broadcast 192.168.0.255
+...
+$> docker exec -it -u dynawo_user dynawo_container bash
+dynawo_user@contaiderID:dynawo$> scp test.txt my_user_name@192.168.0.10:/home/my_user_name/
+```
