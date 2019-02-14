@@ -83,4 +83,5 @@ inet 192.168.0.10  netmask 255.255.255.0 broadcast 192.168.0.255
 ...
 $> docker exec -it -u dynawo_user dynawo_container bash
 dynawo_user@contaiderID:dynawo$> scp test.txt my_user_name@192.168.0.10:/home/my_user_name/
+dynawo_user@contaiderID:dynawo$> scp my_user_name@192.168.0.10:/home/my_user_name/test.txt /home/dynawo_user/test.txt
 ```
