@@ -13,6 +13,8 @@
 # Dyna&omega;o - An hybrid C++/Modelica time-domain simulation tool for power systems - Docker Images
 [![MPL-2.0 License](https://img.shields.io/badge/license-MPL_2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 
+[https://hub.docker.com/r/dynawo/dynawo](https://hub.docker.com/r/dynawo/dynawo)
+
 This repository contains Dyna&omega;o's Docker images.
 
 ## Table of Contents
@@ -124,5 +126,5 @@ Dyna&omega;o is currently maintained by people at RTE, in case of questions or i
 
 For more information about Dyna&omega;o:
 
-* Consult [Dyna&omega;o website](https://dynawo.org)
+* Consult [Dyna&omega;o website](http://dynawo.org)
 * Contact us at [rte-des-simulation-dynamique@rte-france.com](mailto:rte-des-simulation-dynamique@rte-france.com)
