@@ -148,9 +148,9 @@ RUN dnf upgrade -y \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
-&& unzip xzf /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
+&& unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
 && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip -P /opt \
-&& unzip xzf /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar
+&& unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt \
