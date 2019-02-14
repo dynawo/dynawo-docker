@@ -137,6 +137,7 @@ RUN dnf upgrade -y \
   lcov \
   gem \
   unzip \
+  gcovr \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
@@ -149,6 +150,7 @@ RUN dnf upgrade -y \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
+&& cp /opt/sonar/build-wrapper-linux-x86/libinterceptor-x86_64.so /opt/sonar/build-wrapper-linux-x86/libinterceptor-haswell.so \
 && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip -P /opt \
 && unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar
 
