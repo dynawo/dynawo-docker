@@ -63,7 +63,7 @@ Inside the container you can then launch as before:
 dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
 
-If you want to share some data from your host machine to the container you can read a complementary procedure [here](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFolders.md).
+**If you want to share some data from your host machine to the container you can read a complementary procedure [here](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFolders.md).**
 
 <a name="developer"></a>
 ## Developer Image
