@@ -62,6 +62,8 @@ RUN useradd -m -d /home/${USER} --user-group ${USER}
 
 USER ${USER}
 
+ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
+
 WORKDIR /home/${USER}
 
 RUN git clone https://github.com/dynawo/dynawo.git dynawo \
