@@ -1,6 +1,8 @@
+# Share folders on Unix systems (Linux and MacOS)
+
 The major drawback of running the official Dyna&omega;o container with the command `docker run -it dynawo/dynawo` is everything you do is inside the container. New test cases created inside would not be shared with your own machine or test cases created own your own machine would not be accessible in the container. In the following we will describe multiple ways to exchange data between the container and your host machine.
 
-# Docker cp
+## Docker cp
 
 Docker provides a native way to copy back and forth folders from your host machine to a docker container. Remember that inside the container your are logged by default as `dynawo_user`. You can run the following commands:
 ``` bash
@@ -22,9 +24,9 @@ $> ls ~
 ... MyFolder ...
 ```
 
-# Partial solution to see folders inside container
+## Partial solution to see folders inside container
 
-A simple solution to see directly folders of your host machine inside your Docker container:
+A simple solution to see directly folders of your host machine inside your Docker container is to share the folder at the creation of the container, then launching the following command instead of the basic one given previously:
 
 ``` bash
 $> docker run -it -v $PWD:/home/dynawo_user/dynawo/SharedFolder -e USERID=$UID --name dynawo_container dynawo/dynawo
@@ -49,7 +51,7 @@ dynawo SharedFolder
 ```
 This SharedFolder at the root of your container can now be modified inside the container.
 
-# Full solution to see and modify files inside and outside container
+## Full solution to see and modify files inside and outside container
 
 This time we will first create the container in a detached mode with the `root` user while sharing your folder inside the `dynawo_user` folder. Then we update the UID and GID of `dynawo_user` to be able to see and modify files of your host machine inside the container.
 
@@ -62,7 +64,7 @@ dynawo_user@contaiderID:dynawo$> ls
 ... SharedFolder ...
 ```
 
-And this time the files in SharedFolder can directly be modified inside the container and you can even create new ones. The new files will also be available on your host machine and from your machine you will have the right to modify them because they were created this time with the same UID and GID as your account on your machine.
+And this time the files in SharedFolder can directly be modified inside the container and you can even create new ones. The new files will also be available on your host machine and from your machine you will have the right to modify them because they were created this time with the same **UID** and **GID** as your account on your own machine.
 
 **Warning** The reason why we provide `dynawo_user` inside the container is that for safety reasons Docker advise to never run a container as the `root` user.
 
@@ -73,7 +75,7 @@ $> docker exec -u root -it dynawo_container bash
 root@contaiderID:dynawo#> dnf install ...
 ```
 
-# Scp solution in container
+## Scp solution in container
 
 In the container you can also you use scp to send files to your host machine:
 ``` bash

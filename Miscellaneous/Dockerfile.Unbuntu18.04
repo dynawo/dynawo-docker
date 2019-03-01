@@ -1,0 +1,117 @@
+# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# See AUTHORS.txt
+# All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+# SPDX-License-Identifier: MPL-2.0
+#
+# This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+FROM ubuntu:18.04
+LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+
+ENV USER "dynawo_user"
+
+ENV TZ=Europe/Paris \
+DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+&& apt-get upgrade -y -q \
+&& apt-get install -y git \
+  gcc \
+  g++ \
+  gfortran \
+  autoconf \
+  pkgconf \
+  automake \
+  make \
+  libtool \
+  cmake \
+  hwloc \
+  openjdk-8-jdk \
+  libblas-dev \
+  liblpsolve55-dev \
+  libarchive-dev \
+  doxygen \
+  liblapack-dev \
+  libexpat1-dev \
+  libsqlite3-dev \
+  zlib1g-dev \
+  gettext \
+  patch \
+  python-pip \
+  libncurses5-dev \
+  libreadline-dev \
+  libdigest-perl-md5-perl \
+  unzip \
+  lcov \
+  libboost-all-dev \
+  qt4-qmake \
+  qt4-dev-tools \
+  lsb-release \
+  libxml2-utils \
+  python-lxml \
+  python-psutil \
+  vim \
+  wget \
+  rsync \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
+
+ENV GOOGLETEST_VERSION 1.8.1
+
+RUN cd /tmp \
+&& wget https://github.com/google/googletest/archive/release-${GOOGLETEST_VERSION}.tar.gz \
+&& tar -xzvf release-${GOOGLETEST_VERSION}.tar.gz \
+&& cd googletest-release-${GOOGLETEST_VERSION} \
+&& mkdir build \
+&& cd build \
+&& cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON .. \
+&& make \
+&& make install \
+&& rm -f /tmp/release-${GOOGLETEST_VERSION}.tar.gz \
+&& cd ~ \
+&& rm -rf /tmp/googletest-release-${GOOGLETEST_VERSION}*
+
+RUN ldconfig
+
+RUN useradd -m -d /home/${USER} --user-group ${USER}
+
+USER ${USER}
+
+WORKDIR /home/${USER}
+
+RUN git clone https://github.com/dynawo/dynawo.git dynawo \
+&& cd dynawo \
+&& echo $'#!/bin/bash \n\
+export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+\n\
+export OPENMODELICA_VERSION=1_9_4\n\
+export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source\n\
+export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install\n\
+\n\
+export DYNAWO_LOCALE=en_GB\n\
+export USE_ADEPT=YES\n\
+export RESULTS_SHOW=false\n\
+export BROWSER=xdg-open\n\
+\n\
+export NB_PROCESSORS_USED=1\n\
+\n\
+export BUILD_TYPE=Release\n\
+export CXX11_ENABLED=YES\n\
+\n\
+$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
+&& chmod +x myEnvDynawo.sh \
+&& ./myEnvDynawo.sh build-omcDynawo \
+&& ./myEnvDynawo.sh build-3rd-party \
+&& ./myEnvDynawo.sh build-dynawo \
+&& rm -rf OpenModelica/Source \
+&& rm -rf build \
+&& rm -rf install/3rdParty/gcc8/Debug install/3rdParty/gcc8/Debug-cxx11 install/3rdParty/gcc8/Release \
+&& rm -rf OpenModelica/Install/share \
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
+&& echo "alias dynawo='/home/$(whoami)/dynawo/myEnvDynawo.sh'" >> ~/.bashrc
+
+WORKDIR /home/${USER}/dynawo
+
+CMD ["/bin/bash"]

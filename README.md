@@ -37,7 +37,19 @@ We provide this repository to ease users with [Dyna&omega;o' installation](https
 <a name="users"></a>
 ## User image
 
-Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) folder we provide a Dockerfile to build an image integrating the latest Dyna&omega;o version. The user can launch the following commands to build the image, create the Docker container and connect to it.
+Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) folder we provide a Dockerfile to build an image integrating the latest Dyna&omega;o version. This image is available on [Docker Hub](https://hub.docker.com/r/dynawo/dynawo). Then if you already have docker installed on your machine you can directly execute the following command:
+``` bash
+$> docker run -it dynawo/dynawo
+```
+
+Once inside the container the user can use the `dynawo` alias and launch:
+``` bash
+dynawo_user@contaiderID:dynawo$> dynawo nrt
+```
+
+**If you want to share some data from your host machine to the container you can read a complementary procedure [here for Unix systems](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersUnix.md) and [here for Windows](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersWindows.md).**
+
+A user can also build the image from sources and launch the following commands to build it, create the Docker container and connect to it.
 
 ``` bash
 $> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
@@ -47,23 +59,11 @@ $> ./create_container.sh
 $> ./connect_to_container.sh
 ```
 
-Once inside the container the user can use the `dynawo` alias and launch:
-
-``` bash
-dynawo_user@contaiderID:dynawo$> dynawo nrt
-```
-
-This image is also available on [Docker Hub](https://hub.docker.com/r/dynawo/dynawo). Then if you already have docker installed on your machine you can directly execute the following command:
-``` bash
-$> docker run -it dynawo/dynawo
-```
-
 Inside the container you can then launch as before:
+
 ``` bash
 dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
-
-**If you want to share some data from your host machine to the container you can read a complementary procedure [here](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFolders.md).**
 
 <a name="developer"></a>
 ## Developer Image

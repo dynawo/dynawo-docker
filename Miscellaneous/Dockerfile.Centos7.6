@@ -1,0 +1,135 @@
+# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# See AUTHORS.txt
+# All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+# SPDX-License-Identifier: MPL-2.0
+#
+# This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+FROM centos:7.6.1810
+LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+
+ENV USER "dynawo_user"
+
+RUN yum upgrade -y \
+&& yum update -y \
+&& yum install -y \
+  git \
+  gcc \
+  gcc-c++ \
+  gcc-gfortran \
+  autoconf \
+  automake \
+  make \
+  libtool \
+  cmake \
+  hwloc \
+  java-1.8.0-openjdk \
+  blas-devel \
+  lapack-devel \
+  lpsolve-devel \
+  expat-devel \
+  glibc-devel \
+  xulrunner-devel \
+  sqlite-devel \
+  libarchive-devel \
+  zlib-devel \
+  doxygen \
+  qt-devel \
+  gettext \
+  patch \
+  wget \
+  python-devel \
+  llvm-devel \
+  ncurses-devel \
+  readline-devel \
+  unzip \
+  perl-Digest-MD5 \
+  vim \
+  epel-release
+
+RUN yum install -y python-pip python-psutil
+
+ENV BOOST_VERSION 1_68_0
+
+RUN cd /tmp \
+&& wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_${BOOST_VERSION}.tar.gz \
+&& tar -xzvf boost_${BOOST_VERSION}.tar.gz \
+&& cd boost_${BOOST_VERSION} \
+&& ./bootstrap.sh \
+&& ./b2 install \
+&& echo "/usr/local/lib" > /etc/ld.so.conf.d/boost.conf \
+&& rm -f /tmp/boost_${BOOST_VERSION}.tar.gz \
+&& cd ~ \
+&& rm -rf boost_${BOOST_VERSION}*
+
+ENV GOOGLETEST_VERSION 1.8.1
+
+RUN cd /tmp \
+&& wget https://github.com/google/googletest/archive/release-${GOOGLETEST_VERSION}.tar.gz \
+&& tar -xzvf release-${GOOGLETEST_VERSION}.tar.gz \
+&& cd googletest-release-${GOOGLETEST_VERSION} \
+&& mkdir build \
+&& cd build \
+&& cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCVF_VERSION:STRING=1.9.0 .. \
+&& make \
+&& make install \
+&& echo "/usr/local/lib64" > /etc/ld.so.conf.d/gtest.conf \
+&& rm -f /tmp/release-${GOOGLETEST_VERSION}.tar.gz \
+&& cd ~ \
+&& rm -rf /tmp/googletest-release-${GOOGLETEST_VERSION}*
+
+ENV LCOV_VERSION 1.13
+
+RUN cd /tmp \
+&& wget https://downloads.sourceforge.net/ltp/lcov-${LCOV_VERSION}.tar.gz \
+&& tar -xzvf lcov-${LCOV_VERSION}.tar.gz \
+&& cd lcov-${LCOV_VERSION} \
+&& make install \
+&& rm -f /tmp/lcov-${LCOV_VERSION}.tar.gz \
+&& cd ~ \
+&& rm -rf /tmp/lcov-${LCOV_VERSION}*
+
+RUN ldconfig
+
+RUN useradd -m -d /home/${USER} --user-group ${USER}
+
+USER ${USER}
+
+WORKDIR /home/${USER}
+
+RUN git clone https://github.com/dynawo/dynawo.git dynawo \
+&& cd dynawo \
+&& echo $'#!/bin/bash \n\
+export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+\n\
+export OPENMODELICA_VERSION=1_9_4\n\
+export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source\n\
+export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install\n\
+\n\
+export DYNAWO_LOCALE=en_GB\n\
+export USE_ADEPT=YES\n\
+export RESULTS_SHOW=false\n\
+export BROWSER=xdg-open\n\
+\n\
+export NB_PROCESSORS_USED=1\n\
+\n\
+export BUILD_TYPE=Release\n\
+export CXX11_ENABLED=YES\n\
+\n\
+$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
+&& chmod +x myEnvDynawo.sh \
+&& ./myEnvDynawo.sh build-omcDynawo \
+&& ./myEnvDynawo.sh build-3rd-party \
+&& ./myEnvDynawo.sh build-dynawo \
+&& rm -rf OpenModelica/Source \
+&& rm -rf build \
+&& rm -rf install/3rdParty/gcc8/Debug install/3rdParty/gcc8/Debug-cxx11 install/3rdParty/gcc8/Release \
+&& rm -rf OpenModelica/Install/share \
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
+&& echo "alias dynawo='/home/$(whoami)/dynawo/myEnvDynawo.sh'" >> ~/.bashrc
+
+WORKDIR /home/${USER}/dynawo
+
+CMD ["/bin/bash"]
