@@ -37,6 +37,8 @@ We provide this repository to ease users with [Dyna&omega;o' installation](https
 <a name="users"></a>
 ## User image
 
+### From Docker Hub
+
 Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) folder we provide a Dockerfile to build an image integrating the latest Dyna&omega;o version. This image is available on [Docker Hub](https://hub.docker.com/r/dynawo/dynawo). Then if you already have docker installed on your machine you can directly execute the following command:
 ``` bash
 $> docker run -it dynawo/dynawo
@@ -48,6 +50,8 @@ dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
 
 **If you want to share some data from your host machine to the container you can read a complementary procedure [here for Unix systems](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersUnix.md) and [here for Windows](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersWindows.md).**
+
+### From sources
 
 A user can also build the image from sources and launch the following commands to build it, create the Docker container and connect to it.
 
