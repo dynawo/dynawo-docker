@@ -9,12 +9,11 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-#
 
-user_identity() {
-  USER_NAME=$(whoami)
-  USER_ID=$(id -u $USER_NAME)
-  GROUP_ID=$(id -g $USER_NAME)
-  GROUP_NAME=$(id -gn $USER_NAME)
-  USER_HOME=$(eval echo "~$USER_NAME")
-}
+if [ ! -z "$USER_NAME" ]; then
+  usermod -aG wheel $USER_NAME
+  sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers
+  exec /usr/local/bin/gosu $USER_NAME "$@"
+else
+  exec "$@"
+fi

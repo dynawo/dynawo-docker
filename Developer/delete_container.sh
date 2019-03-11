@@ -14,33 +14,17 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name             image name created (default: dynawo)
+    --name             container name to delete (default: dynawo)
     --help             print this message.
 "
 }
 
-build_image() {
-  if ! `image_exists $image_name`; then
-    docker build -t $image_name --no-cache \
-      --build-arg USER_NAME=$USER_NAME \
-      --build-arg USER_ID=$USER_ID \
-      --build-arg GROUP_ID=$GROUP_ID \
-      --build-arg GROUP_NAME=$GROUP_NAME \
-      .
-  else
-    echo "Image $image_name already exists. You can delete it with: ./delete_image.sh --name $image_name"
-    exit 1
-  fi
-}
+container_name=dynawo-dev
 
-user_identity
-
-image_name=dynawo-dev
-
-opts=`getopt -o '' --long "help,name:" -n 'build_docker_image' -- "$@"`
+opts=`getopt -o '' --long "help,name:" -n 'delete_container' -- "$@"`
 if [ $? -ne 0 ]; then usage; exit 1; fi
 eval set -- "$opts"
 while true; do
@@ -50,7 +34,7 @@ while true; do
       exit 0
       ;;
     --name)
-      image_name=$2
+      container_name=$2
       shift 2
       ;;
     --)
@@ -63,4 +47,4 @@ while true; do
   esac
 done
 
-build_image
+delete_container $container_name

@@ -64,8 +64,16 @@ RUN dnf upgrade -y \
   rsync \
   python-lxml \
   graphviz \
+  gpg \
+  curl \
+  dpkg \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
+
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
+  && chmod +x /usr/local/bin/gosu
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN groupadd ${GROUP_NAME} -g ${GROUP_ID}
 
@@ -76,5 +84,9 @@ USER ${USER_NAME}
 COPY install_dynawo.sh /opt
 
 WORKDIR /home/${USER_NAME}
+
+USER root
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD ["/bin/bash"]

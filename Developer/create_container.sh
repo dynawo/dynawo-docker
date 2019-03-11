@@ -11,13 +11,67 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
 
-. util.sh
+source ../Helper/helper.sh
+
+usage() {
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container.
+
+  where OPTIONS can be one of the following:
+    --container-name   container name created (default: dynawo-dev)
+    --image-name       image name (default: dynawo-dev)
+    --help             print this message.
+"
+}
+
+create_container() {
+  if ! `container_exists $container_name`; then
+    if `image_exists $image_name`; then
+      docker run -it -d --name=$container_name \
+        -v $USER_HOME:/home/$USER_NAME \
+        -e USER_NAME=$USER_NAME \
+        $image_name
+    else
+      echo "You specified an image name that is not existing."
+      echo "List of available images:"
+      for name in `docker images --format "{{.Repository}}" | sort | uniq`; do echo "  $name"; done
+      exit 1
+    fi
+  else
+    echo "Container $container_name already exists. You can delete it with: ./delete_container.sh --name $container_name"
+    exit 1
+  fi
+}
 
 user_identity
 
 image_name=dynawo-dev
-container_name=dynawo_container_dev
+container_name=dynawo-dev
 
-docker run -it -d --name=$container_name -v $USER_HOME:/home/$USER_NAME $image_name
-docker exec -it -u root $container_name usermod -aG wheel $USER_NAME
-docker exec -it -u root $container_name bash -c "sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers"
+opts=`getopt -o '' --long "help,container-name:,image-name:" -n 'create_container' -- "$@"`
+if [ $? -ne 0 ]; then usage; exit 1; fi
+eval set -- "$opts"
+while true; do
+  case "$1" in
+    --help)
+      usage
+      exit 0
+      ;;
+    --container-name)
+      container_name=$2
+      shift 2
+      ;;
+    --image-name)
+      image_name=$2
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+create_container

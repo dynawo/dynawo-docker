@@ -11,6 +11,68 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
 
-container_name=dynawo_container_dev
+source ../Helper/helper.sh
 
-docker exec -it $container_name bash
+usage() {
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
+
+  where OPTIONS can be one of the following:
+    --name             container name to connect to (default: dynawo-dev)
+    --help             print this message.
+"
+}
+
+connect_to_container() {
+  if `container_exists $container_name`; then
+    if `container_is_running $container_name`; then
+      while true; do
+        if [ ! "$(docker top $container_name | tail -n +2 | grep "entrypoint")" ]; then
+          break
+        else
+          if [ -z "$first_time" ]; then
+            echo "Waiting for Docker container $container_name to start."
+            first_time=1
+          fi
+          sleep 2
+        fi
+      done
+    else
+      docker start $container_name
+    fi
+    docker exec -it -u $USER_NAME $container_name bash
+  else
+    echo "You specified a container $container_name that is not created."
+    echo "List of available containers:"
+    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+    exit 1
+  fi
+}
+
+user_identity
+
+container_name=dynawo-dev
+
+opts=`getopt -o '' --long "help,name:" -n 'connect_to_container' -- "$@"`
+if [ $? -ne 0 ]; then usage; exit 1; fi
+eval set -- "$opts"
+while true; do
+  case "$1" in
+    --help)
+      usage
+      exit 0
+      ;;
+    --name)
+      container_name=$2
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+connect_to_container
