@@ -14,10 +14,11 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container with a shared folder from your host machine.
 
   where OPTIONS can be one of the following:
-    --container-name   container name created (default: dynawo)
+    --folder           folder path to share inside docker container.
+    --container-name   container name to be created (default: dynawo).
     --image-name       image name (default: dynawo)
     --help             print this message.
 "
@@ -29,6 +30,7 @@ create_container() {
       docker run -it -d --name=$container_name \
         -e LOCAL_USER_ID=`id -u $USER` \
         -e LOCAL_GROUP_ID=`id -g $USER` \
+        -v $USER_FOLDER:/home/dynawo_user/$(basename $USER_FOLDER) \
         $image_name
     else
       echo "You specified an image name that is not existing."
@@ -45,11 +47,16 @@ create_container() {
 container_name=dynawo
 image_name=dynawo
 
-opts=`getopt -o '' --long "help,container-name:,image-name:" -n 'create_container' -- "$@"`
+opts=`getopt -o '' --long "help,folder:,container-name:,image-name:" -n 'create_container_with_shared_folder' -- "$@"`
 if [ $? -ne 0 ]; then usage; exit 1; fi
 eval set -- "$opts"
 while true; do
   case "$1" in
+    --folder)
+      MODE=create
+      USER_FOLDER=$2
+      shift 2
+      ;;
     --help)
       usage
       exit 0
@@ -72,4 +79,13 @@ while true; do
   esac
 done
 
-create_container
+case $MODE in
+  create)
+    create_container
+    ;;
+  *)
+    echo
+    usage
+    exit 0
+    ;;
+esac

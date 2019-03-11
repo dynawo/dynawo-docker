@@ -75,7 +75,6 @@ export SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
 export INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
 \n\
 export DYNAWO_LOCALE=en_GB\n\
-export USE_ADEPT=YES\n\
 export RESULTS_SHOW=false\n\
 export BROWSER=xdg-open\n\
 \n\
