@@ -26,10 +26,10 @@ usage() {
 create_container() {
   if ! `container_exists $container_name`; then
     if `image_exists $image_name`; then
-      docker run -it -d --name=$container_name \
-        -e LOCAL_USER_ID=`id -u $USER` \
-        -e LOCAL_GROUP_ID=`id -g $USER` \
-        $image_name
+      docker run -it --name=$container_name \
+      	-e LOCAL_USER_ID=`id -u $USER` \
+      	-e LOCAL_GROUP_ID=`id -g $USER` \
+      	$image_name
     else
       echo "You specified an image name that is not existing."
       echo "List of available images:"

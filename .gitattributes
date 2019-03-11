@@ -1,0 +1,6 @@
+Dockerfile.Centos6.4 linguist-language=Dockerfile
+Dockerfile.Centos7.6 linguist-language=Dockerfile
+Dockerfile.Unbuntu18.04 linguist-language=Dockerfile
+Dockerfile.Centos6.7 linguist-language=Dockerfile
+Dockerfile.Debian9.7 linguist-language=Dockerfile
+Dockerfile.Unbuntu19.04 linguist-language=Dockerfile

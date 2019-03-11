@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --container-name   container name created (default: dynawo)
-    --image-name       image name (default: dynawo)
+    --container-name   container name created (default: dynawo-dev)
+    --image-name       image name (default: dynawo-dev)
     --help             print this message.
 "
 }
@@ -26,9 +26,9 @@ usage() {
 create_container() {
   if ! `container_exists $container_name`; then
     if `image_exists $image_name`; then
-      docker run -it -d --name=$container_name \
-        -e LOCAL_USER_ID=`id -u $USER` \
-        -e LOCAL_GROUP_ID=`id -g $USER` \
+      docker run -it --name=$container_name \
+        -v $USER_HOME:/home/$USER_NAME \
+        -e USER_NAME=$USER_NAME  \
         $image_name
     else
       echo "You specified an image name that is not existing."
@@ -42,8 +42,10 @@ create_container() {
   fi
 }
 
-container_name=dynawo
-image_name=dynawo
+user_identity
+
+image_name=dynawo-dev
+container_name=dynawo-dev
 
 opts=`getopt -o '' --long "help,container-name:,image-name:" -n 'create_container' -- "$@"`
 if [ $? -ne 0 ]; then usage; exit 1; fi

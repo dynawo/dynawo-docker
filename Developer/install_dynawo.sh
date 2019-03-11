@@ -11,26 +11,81 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
 
-git clone https://github.com/dynawo/dynawo.git dynawo
-cd dynawo
-echo '#!/bin/bash
-export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+usage() {
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to install Dynawo in a folder.
 
-export OPENMODELICA_VERSION=1_9_4
-export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source
-export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
+  where OPTIONS can be one of the following:
+    --prefix           prefix path to install Dynawo.
+    --help             print this message.
+"
+}
 
-export DYNAWO_LOCALE=en_GB
-export USE_ADEPT=YES
-export RESULTS_SHOW=false
-export BROWSER=xdg-open
+install_dynawo() {
+  if [ -z "$1" ]; then
+    echo "install_dynawo needs a prefix path to install Dynawo in it."
+    exit 1
+  fi
+  local PREFIX_PATH=$1
+  if [ ! -d "$PREFIX_PATH" ]; then
+    mkdir -p $PREFIX_PATH
+  fi
+  cd $PREFIX_PATH
+  git clone https://github.com/dynawo/dynawo.git dynawo
+  cd dynawo
+  echo '#!/bin/bash
+  export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-export NB_PROCESSORS_USED=$(($(nproc --all)/2))
+  export OPENMODELICA_VERSION=1_9_4
+  export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source
+  export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
 
-export BUILD_TYPE=Release
-export CXX11_ENABLED=YES
+  export DYNAWO_LOCALE=en_GB
+  export RESULTS_SHOW=false
+  export BROWSER=xdg-open
 
-$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
-chmod +x myEnvDynawo.sh
-./myEnvDynawo.sh build-omcDynawo
-./myEnvDynawo.sh build-all
+  export NB_PROCESSORS_USED=$(($(nproc --all)/2))
+
+  export BUILD_TYPE=Release
+  export CXX11_ENABLED=YES
+
+  $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
+  chmod +x myEnvDynawo.sh
+  ./myEnvDynawo.sh build-omcDynawo
+  ./myEnvDynawo.sh build-3rd-party-version
+  ./myEnvDynawo.sh build-dynawo
+}
+
+opts=`getopt -o '' --long "help,prefix:" -n 'install_dynawo' -- "$@"`
+if [ $? -ne 0 ]; then usage; exit 1; fi
+eval set -- "$opts"
+while true; do
+  case "$1" in
+    --prefix)
+      MODE=install
+      USER_FOLDER=${2%/}
+      shift 2
+      ;;
+    --help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+case $MODE in
+  install)
+    install_dynawo $USER_FOLDER
+    ;;
+  *)
+    echo
+    usage
+    exit 0
+    ;;
+esac

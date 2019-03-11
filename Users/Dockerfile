@@ -55,8 +55,17 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
+  ca-certificates \
+  gpg \
+  curl \
+  dpkg \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
+
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
+  && chmod +x /usr/local/bin/gosu
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN useradd -m -d /home/${USER} --user-group ${USER}
 
@@ -76,7 +85,6 @@ export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source\n\
 export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install\n\
 \n\
 export DYNAWO_LOCALE=en_GB\n\
-export USE_ADEPT=YES\n\
 export RESULTS_SHOW=false\n\
 export BROWSER=xdg-open\n\
 \n\
@@ -88,15 +96,18 @@ export CXX11_ENABLED=YES\n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
-&& ./myEnvDynawo.sh build-3rd-party \
+&& ./myEnvDynawo.sh build-3rd-party-version \
 && ./myEnvDynawo.sh build-dynawo \
 && rm -rf OpenModelica/Source \
 && rm -rf build \
-&& rm -rf install/3rdParty/gcc8/Debug install/3rdParty/gcc8/Debug-cxx11 install/3rdParty/gcc8/Release \
 && rm -rf OpenModelica/Install/share \
 && rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
 && echo "alias dynawo='/home/$(whoami)/dynawo/myEnvDynawo.sh'" >> ~/.bashrc
 
 WORKDIR /home/${USER}/dynawo
+
+USER root
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD ["/bin/bash"]

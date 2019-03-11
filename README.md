@@ -44,30 +44,19 @@ Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) fol
 $> docker run -it dynawo/dynawo
 ```
 
+The previous command is a very basic one to just test Dyna&omega;o very quickly. **We recommend** you to create a container by sharing a folder of your host machine so that you can access it inside and outside the container to create your own test cases. You can launch the following command (`FOLDER_PATH` needs to be modified with appropriate value):
+``` bash
+$> docker run -it -e LOCAL_USER_ID=`id -u $USER` -e LOCAL_GROUP_ID=`id -g $USER` -v FOLDER_PATH:/home/dynawo_user/SharedFolder dynawo/dynawo
+```
+
 Once inside the container the user can use the `dynawo` alias and launch:
 ``` bash
 dynawo_user@contaiderID:dynawo$> dynawo nrt
 ```
 
-**If you want to share some data from your host machine to the container you can read a complementary procedure [here for Unix systems](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersUnix.md) and [here for Windows](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersWindows.md).**
-
 ### From sources
 
-A user can also build the image from sources and launch the following commands to build it, create the Docker container and connect to it.
-
-``` bash
-$> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
-$> cd dynawo-docker/Users
-$> ./build_image.sh
-$> ./create_container.sh
-$> ./connect_to_container.sh
-```
-
-Inside the container you can then launch as before:
-
-``` bash
-dynawo_user@contaiderID:dynawo$> dynawo nrt
-```
+You can also build your image from sources by following [these instructions](https://github.com/dynawo/dynawo-docker/blob/master/Users/BuildFromSources.md).
 
 <a name="developer"></a>
 ## Developer Image
@@ -77,7 +66,7 @@ Under the [Developer](https://github.com/dynawo/dynawo-docker/tree/master/Develo
 ``` bash
 $> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
 $> cd dynawo-docker/Developer
-$> ./build_image.sh
+$> ./build_docker_image.sh
 ```
 
 Then you need to create the container, this time we create a mirror user of you inside the container to be able to access files inside and outside the container. We also provide this account with `sudo` privileges.
@@ -95,8 +84,7 @@ $> ./connect_to_container.sh
 You can now download and install Dyna&omega;o were you want to on your system, your home folder has been shared inside the container as the home folder of the user in the container (user with the same name uid and gid as you). For this you can use the script provided in the container and launch, we call MY_DYNAWO_PATH the path were you want to install Dyna&omega;o on your machine:
 
 ``` bash
-your_user_name@contaiderID:~$> cd MY_DYNAWO_PATH
-your_user_name@contaiderID:MY_DYNAWO_PATH$> /opt/install_dynawo.sh
+your_user_name@contaiderID:MY_DYNAWO_PATH$> /opt/install_dynawo.sh --prefix MY_DYNAWO_PATH
 ```
 
 At the end of the script Dyna&omega;o source code is available on your machine and has been fully compiled, you can then launch:
