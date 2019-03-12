@@ -17,7 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name             container name to delete (default: dynawo)
+    --name             container name to delete (default: dynawo-dev)
     --help             print this message.
 "
 }

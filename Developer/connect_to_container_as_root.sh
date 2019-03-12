@@ -17,7 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container as root.
 
   where OPTIONS can be one of the following:
-    --name             container name to connect to (default: dynawo)
+    --name             container name to connect to (default: dynawo-dev)
     --help             print this message.
 "
 }
