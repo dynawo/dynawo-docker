@@ -53,6 +53,7 @@ install_dynawo() {
   ./myEnvDynawo.sh build-omcDynawo
   ./myEnvDynawo.sh build-3rd-party-version
   ./myEnvDynawo.sh build-dynawo
+  ./myEnvDynawo.sh deploy-autocompletion --deploy
 }
 
 opts=`getopt -o '' --long "help,prefix:" -n 'install_dynawo' -- "$@"`

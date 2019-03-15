@@ -98,11 +98,11 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
 && ./myEnvDynawo.sh build-3rd-party-version \
 && ./myEnvDynawo.sh build-dynawo \
+&& ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \
 && rm -rf build \
 && rm -rf OpenModelica/Install/share \
-&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
-&& echo "alias dynawo='/home/$(whoami)/dynawo/myEnvDynawo.sh'" >> ~/.bashrc
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 >> ~/.bashrc
 
 WORKDIR /home/${USER}/dynawo
 
