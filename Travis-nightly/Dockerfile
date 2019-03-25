@@ -140,6 +140,7 @@ RUN dnf upgrade -y \
   gem \
   unzip \
   gcovr \
+  libcurl-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
