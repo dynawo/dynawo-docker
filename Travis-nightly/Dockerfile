@@ -99,7 +99,8 @@ FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 ENV USER "dynawo_travis"
-ENV ADEPT_VERSION "1.1"
+ENV ADEPT_VERSION_1 "1.1"
+ENV ADEPT_VERSION_2 "2.0.5"
 ENV SUITE_SPARSE_VERSION "4.5.4"
 ENV SUNDIALS_VERSION_1 "4.0.2"
 ENV SUNDIALS_VERSION_2 "4.1.0"
@@ -143,7 +144,8 @@ RUN dnf upgrade -y \
   libcurl-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
-&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
+&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION_1}.tar.gz -P /opt \
+&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION_2}.tar.gz -P /opt \
 && wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION_1}.tar.gz -P /opt \
 && wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION_2}.tar.gz -P /opt \
 && wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
