@@ -113,8 +113,8 @@ ENV FLOT_VERSION "0.6.0"
 RUN dnf upgrade -y \
 && dnf update -y \
 && dnf install -y \
-  blas \
-  lapack \
+  blas-devel \
+  lapack-devel \
   lpsolve \
   git \
   cmake \
