@@ -121,6 +121,7 @@ RUN dnf upgrade -y \
   cmake \
   gcc \
   gcc-c++ \
+  gcc-gfortran \
   make \
   libarchive-devel \
   gtest-devel \
