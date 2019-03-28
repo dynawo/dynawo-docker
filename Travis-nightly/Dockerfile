@@ -120,6 +120,7 @@ RUN dnf upgrade -y \
   cmake \
   gcc \
   gcc-c++ \
+  gcc-gfortran \
   clang \
   llvm-devel \
   make \
