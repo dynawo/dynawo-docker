@@ -17,17 +17,14 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container as root.
 
   where OPTIONS can be one of the following:
-    --name             container name to connect to (default: dynawo-dev)
+    --name myname      container name to connect to (default: dynawo-dev)
     --help             print this message.
 "
 }
 
 container_name=dynawo-dev
 
-opts=`getopt -o '' --long "help,name:" -n 'connect_to_container_as_root' -- "$@"`
-if [ $? -ne 0 ]; then usage; exit 1; fi
-eval set -- "$opts"
-while true; do
+while (($#)); do
   case "$1" in
     --help)
       usage
@@ -37,12 +34,10 @@ while true; do
       container_name=$2
       shift 2
       ;;
-    --)
-      shift
-      break
-      ;;
     *)
-      break
+      echo "$1: invalid option."
+      usage
+      exit 1
       ;;
   esac
 done
