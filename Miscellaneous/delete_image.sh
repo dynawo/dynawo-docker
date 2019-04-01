@@ -14,15 +14,15 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name myname      container name to delete (default: dynawo-dev)
+    --name myname      image name to delete (mandatory)
     --help             print this message.
 "
 }
 
-container_name=dynawo-dev
+image_name=""
 
 while (($#)); do
   case "$1" in
@@ -31,7 +31,7 @@ while (($#)); do
       exit 0
       ;;
     --name)
-      container_name=$2
+      image_name=$2
       shift 2
       ;;
     *)
@@ -42,4 +42,9 @@ while (($#)); do
   esac
 done
 
-delete_container $container_name
+if [ ! -z "$image_name" ]; then
+  delete_image $image_name
+else
+  usage
+  exit 1
+fi

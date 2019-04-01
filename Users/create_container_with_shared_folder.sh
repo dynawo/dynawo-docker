@@ -17,10 +17,10 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container with a shared folder from your host machine.
 
   where OPTIONS can be one of the following:
-    --folder           folder path to share inside docker container.
-    --container-name   container name to be created (default: dynawo).
-    --image-name       image name (default: dynawo)
-    --help             print this message.
+    --folder myfolder              folder path to share inside docker container (mandatory).
+    --container-name mycontainer   container name to be created (default: dynawo).
+    --image-name myimage           image name (default: dynawo)
+    --help                         print this message.
 "
 }
 
@@ -47,10 +47,9 @@ create_container() {
 container_name=dynawo
 image_name=dynawo
 
-opts=`getopt -o '' --long "help,folder:,container-name:,image-name:" -n 'create_container_with_shared_folder' -- "$@"`
-if [ $? -ne 0 ]; then usage; exit 1; fi
-eval set -- "$opts"
-while true; do
+MODE=""
+
+while (($#)); do
   case "$1" in
     --folder)
       MODE=create
@@ -69,12 +68,10 @@ while true; do
       image_name=$2
       shift 2
       ;;
-    --)
-      shift
-      break
-      ;;
     *)
-      break
+      echo "$1: invalid option."
+      usage
+      exit 1
       ;;
   esac
 done

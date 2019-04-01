@@ -17,12 +17,12 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name myname      container name to delete (default: dynawo-dev)
+    --name myname      container name to delete (mandatory)
     --help             print this message.
 "
 }
 
-container_name=dynawo-dev
+container_name=""
 
 while (($#)); do
   case "$1" in
@@ -42,4 +42,9 @@ while (($#)); do
   esac
 done
 
-delete_container $container_name
+if [ ! -z "$container_name" ]; then
+  delete_container $container_name
+else
+  usage
+  exit 1
+fi

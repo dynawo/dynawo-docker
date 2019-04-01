@@ -17,4 +17,16 @@ read -p "Choose Docker image: " image_name
 
 container_name=${image_name}
 
-docker run -it -d --name=$container_name $image_name
+if ! `container_exists $container_name`; then
+  if `image_exists $image_name`; then
+    docker run -it -d --name=$container_name $image_name
+  else
+    echo "You specified an image name that is not existing."
+    echo "List of available images:"
+    for name in `docker images --format "{{.Repository}}" | sort | uniq`; do echo "  $name"; done
+    exit 1
+  fi
+else
+  echo "Container $container_name already exists. You can delete it with: ./delete_container.sh --name $container_name"
+  exit 1
+fi

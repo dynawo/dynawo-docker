@@ -15,8 +15,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to install Dynawo in a folder.
 
   where OPTIONS can be one of the following:
-    --prefix           prefix path to install Dynawo.
-    --help             print this message.
+    --prefix mypath        prefix path to install Dynawo (mandatory).
+    --help                 print this message.
 "
 }
 
@@ -56,10 +56,9 @@ install_dynawo() {
   ./myEnvDynawo.sh deploy-autocompletion --deploy
 }
 
-opts=`getopt -o '' --long "help,prefix:" -n 'install_dynawo' -- "$@"`
-if [ $? -ne 0 ]; then usage; exit 1; fi
-eval set -- "$opts"
-while true; do
+MODE=""
+
+while (($#)); do
   case "$1" in
     --prefix)
       MODE=install
@@ -70,12 +69,10 @@ while true; do
       usage
       exit 0
       ;;
-    --)
-      shift
-      break
-      ;;
     *)
-      break
+      echo "$1: invalid option."
+      usage
+      exit 1
       ;;
   esac
 done

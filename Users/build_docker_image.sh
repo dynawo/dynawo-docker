@@ -17,7 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name             image name created (default: dynawo)
+    --name myname      image name created (default: dynawo)
     --help             print this message.
 "
 }
@@ -33,10 +33,7 @@ build_image() {
 
 image_name=dynawo
 
-opts=`getopt -o '' --long "help,name:" -n 'build_docker_image' -- "$@"`
-if [ $? -ne 0 ]; then usage; exit 1; fi
-eval set -- "$opts"
-while true; do
+while (($#)); do
   case "$1" in
     --help)
       usage
@@ -46,12 +43,10 @@ while true; do
       image_name=$2
       shift 2
       ;;
-    --)
-      shift
-      break
-      ;;
     *)
-      break
+      echo "$1: invalid option."
+      usage
+      exit 1
       ;;
   esac
 done

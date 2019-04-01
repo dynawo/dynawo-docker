@@ -10,9 +10,22 @@
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
+
+source ../Helper/helper.sh
+
 echo -e "\nExisting containers:\n"
 docker ps -a --format "{{.Names}}"
 echo -e "\r"
 read -p "Choose container: " container_name
 
-docker exec -it -u dynawo_user $container_name bash
+if `container_exists $container_name`; then
+  if ! `container_is_running $container_name`; then
+    docker start $container_name
+  fi
+  docker exec -it -u dynawo_user $container_name bash
+else
+  echo "You specified a container $container_name that is not created."
+  echo "List of available containers:"
+  for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+  exit 1
+fi
