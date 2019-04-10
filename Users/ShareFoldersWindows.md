@@ -4,7 +4,7 @@ The major drawback of running the official Dyna&omega;o container with the comma
 
 ## Docker Toolbox
 
-For the moment we only tested the legacy version of Docker on Windows: [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/). To share the folder `C:\Users\myName\MyDynawoTest` inside a container and be able to modify files of this folder inside the container and inside your own machine you can create the container with the following command:
+For the legacy version of Docker on Windows: [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/), launched with **Docker Quickstart Terminal**, to share the folder `C:\Users\myName\MyDynawoTest` inside a container and be able to modify files inside the container and on your own machine you can create the container with the following command:
 
 ``` bash
 $> docker run -it --name dynawo_container -v /c/Users/myName/MyDynawoTest:/home/dynawo_user/SharedFolder dynawo/dynawo
@@ -12,6 +12,12 @@ $> docker run -it --name dynawo_container -v /c/Users/myName/MyDynawoTest:/home/
 
 As Docker Toolbox run inside a VM it allows you to directly use the files in and out of the container without any problem.
 
-## Docker Desktop
+## Docker Desktop CE for Windows
 
-The procedure for the official version of Docker on [Windows](https://docs.docker.com/docker-for-windows/) should be rather similar, we will test it in a near future.
+For the official version of Docker on [Windows](https://docs.docker.com/docker-for-windows/), you can launch a Windows command line interpreter (Windows+R and then execute cmd), to share the folder `C:\Users\myName\MyDynawoTest` you can create the container with the following command:
+
+``` bash
+$> docker run -it --name dynawo_container -v c:/Users/myName/MyDynawoTest:/home/dynawo_user/SharedFolder dynawo/dynawo
+```
+
+Docker for Windows will ask you to Share your drive, you can follow official instructions [here](https://docs.docker.com/docker-for-windows/#shared-drives-on-demand).

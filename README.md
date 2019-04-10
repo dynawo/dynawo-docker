@@ -62,7 +62,11 @@ You can also build your image from sources by following [these instructions](htt
 <a name="developer"></a>
 ## Developer Image
 
-Under the [Developer](https://github.com/dynawo/dynawo-docker/tree/master/Developer) folder we provide a Dockerfile to build an image containing all necessary tools to compile Dyna&omega;o. This time the approach is to store the sources on your machine, so that you can use your favorite IDE to develop, and use the container to compile the code. First you have to build an image with the following commands:
+Under the [Developer](https://github.com/dynawo/dynawo-docker/tree/master/Developer) folder we provide a Dockerfile to build an image containing all necessary tools to compile Dyna&omega;o. This time the approach is to store the sources on your machine, so that you can use your favorite IDE to develop, and use the container to compile the code.
+
+### Linux, Unix and Windows Toolbox (with Docker Quickstart Terminal)
+
+First you have to build an image with the following commands:
 
 ``` bash
 $> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
@@ -70,7 +74,7 @@ $> cd dynawo-docker/Developer
 $> ./build_docker_image.sh
 ```
 
-Then you need to create the container, this time we create a mirror user of you inside the container to be able to access files inside and outside the container. We also provide this account with `sudo` privileges.
+Then you need to create the container, this time we create a mirror user of you inside the container to be able to access files inside and outside the container. We **share your entire HOME inside the container as the HOME of the mirror user in the container**. We also provide this account with `sudo` privileges.
 
 ``` bash
 $> ./create_container.sh
@@ -85,19 +89,30 @@ $> ./connect_to_container.sh
 You can now download and install Dyna&omega;o were you want to on your system, your home folder has been shared inside the container as the home folder of the user in the container (user with the same name uid and gid as you). For this you can use the script provided in the container and launch, we call MY_DYNAWO_PATH the path were you want to install Dyna&omega;o on your machine:
 
 ``` bash
-your_user_name@contaiderID:MY_DYNAWO_PATH$> /opt/install_dynawo.sh --prefix MY_DYNAWO_PATH
+your_user_name@contaiderID:~$> /opt/install_dynawo.sh --prefix MY_DYNAWO_PATH
 ```
 
 At the end of the script Dyna&omega;o source code is available on your machine and has been fully compiled, you can then launch:
 
 ``` bash
-your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> ./myEnvDynawo.sh nrt
-your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> ./myEnvDynawo.sh help
+your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> dynawo nrt
+your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> dynawo help
 ```
 
-You can also add an alias in your bashrc:
+### Windows Desktop CE for Windows
+
+This time you need to launch a Windows command line interpreter. You also need to have [Git for Windows](https://git-scm.com/download/win) installed to first checkout this repository. Then execute the following commands to create the image and a container:
+
 ``` bash
-your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> echo "alias dynawo=$(pwd)/myEnvDynawo.sh" >> ~/.bashrc
+> cd PATH_TO_THIS_REPOSITORY/Developer
+> docker build docker build -t dynawo-dev --no-cache .
+> docker run -it --name=dynawo-dev -v c:/Users/myName:/home/dynawo_developer dynawo-dev
+```
+
+You need to enable sharing of your C drive, follow official instructions [here](https://docs.docker.com/docker-for-windows/#shared-drives-on-demand). Inside the container we created a user named dynawo_developer. You can the install Dyna&omega;o inside the container with the following command:
+
+``` bash
+dynawo_developer@contaiderID:~$> /opt/install_dynawo.sh --prefix MY_DYNAWO_PATH
 ```
 
 For **MacOS** or **Windows** users we recommend using this solution as no toolchain is provided to compile Dyna&omega;o natively on those OS. In this approach the Docker container is used as a substitute bash, with Linux compiler, to compile the code while still being able to edit Dyna&omega;o source code natively on your machine with your favorite IDE. We also warn about the resources you allowed to the Docker deamon as it could result in very slow compilation or even failures, if it occurs we recommend to increase CPU and RAM allowed to Docker in the settings.

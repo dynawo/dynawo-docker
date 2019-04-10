@@ -10,10 +10,10 @@
 FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
-ARG USER_NAME
-ARG USER_ID
-ARG GROUP_ID
-ARG GROUP_NAME
+ARG USER_NAME=dynawo_developer
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+ARG GROUP_NAME=dynawo_developer
 
 RUN dnf upgrade -y \
 && dnf update -y \
@@ -75,7 +75,7 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN groupadd ${GROUP_NAME} -g ${GROUP_ID}
+RUN groupadd -f ${GROUP_NAME} -g ${GROUP_ID}
 
 RUN useradd -l -m -d /home/${USER_NAME} ${USER_NAME} -g ${GROUP_ID} -u ${USER_ID}
 
