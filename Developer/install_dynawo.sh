@@ -35,7 +35,6 @@ install_dynawo() {
   echo '#!/bin/bash
   export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-  export OPENMODELICA_VERSION=1_9_4
   export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source
   export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
 
@@ -50,9 +49,7 @@ install_dynawo() {
 
   $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
   chmod +x myEnvDynawo.sh
-  ./myEnvDynawo.sh build-omcDynawo
-  ./myEnvDynawo.sh build-3rd-party-version
-  ./myEnvDynawo.sh build-dynawo
+  ./myEnvDynawo.sh build-user
   ./myEnvDynawo.sh deploy-autocompletion --deploy
 }
 
