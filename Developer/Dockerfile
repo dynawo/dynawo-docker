@@ -67,6 +67,7 @@ RUN dnf upgrade -y \
   gpg \
   curl \
   dpkg \
+  libcurl-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
