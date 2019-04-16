@@ -58,6 +58,7 @@ RUN dnf upgrade -y \
   ca-certificates \
   gpg \
   curl \
+  libcurl-devel \
   dpkg \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
@@ -67,7 +68,7 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN useradd -m -d /home/${USER} --user-group ${USER}
+RUN useradd -l -m -d /home/${USER} --user-group ${USER}
 
 USER ${USER}
 

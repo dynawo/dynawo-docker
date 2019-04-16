@@ -10,10 +10,24 @@
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
-echo -e "\nExisting images:\n"
-docker images --format "{{.Repository}}"
-echo -e "\r"
-read -p "Choose Docker image: " image_name
+
+source ../Helper/helper.sh
+
+if [ -z "$1" ]; then
+  echo -e "\nExisting images:\n"
+  docker images --format "{{.Repository}}"
+  echo -e "\r"
+  read -p "Choose Docker image: " image_name
+else
+  if `image_exists $1`; then
+    image_name=$1
+  else
+    echo "You specified an image name that is not existing."
+    echo "List of available images:"
+    for name in `docker images --format "{{.Repository}}" | sort | uniq`; do echo "  $name"; done
+    exit 1
+  fi
+fi
 
 container_name=${image_name}
 

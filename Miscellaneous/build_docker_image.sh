@@ -13,12 +13,21 @@
 
 source ../Helper/helper.sh
 
-echo -e "\nAvailable Dockerfiles:\n"
-for file in $(find . -maxdepth 1 -name "*Dockerfile*"); do
-  echo -e "\t- $file"
-done
-echo -e "\r"
-read -p "Choose Dockerfile: " dockerfile_name
+if [ -z "$1" ]; then
+  echo -e "\nAvailable Dockerfiles:\n"
+  for file in $(find . -maxdepth 1 -name "*Dockerfile*"); do
+    echo -e "\t- $file"
+  done
+  echo -e "\r"
+  read -p "Choose Dockerfile: " dockerfile_name
+else
+  if [ -f "$1" ]; then
+    dockerfile_name=$1
+  else
+    echo "$1 does not exist."
+    exit 1
+  fi
+fi
 
 image_name=dynawo-$(echo $(basename ${dockerfile_name}) | sed 's/Dockerfile.//' | tr '[A-Z]' '[a-z]')
 
