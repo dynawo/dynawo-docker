@@ -109,7 +109,7 @@ This time you need to launch a Windows command line interpreter. You also need t
 > docker run -it --name=dynawo-dev -v c:/Users/myName:/home/dynawo_developer dynawo-dev
 ```
 
-You need to enable sharing of your C drive, follow official instructions [here](https://docs.docker.com/docker-for-windows/#shared-drives-on-demand). Inside the container we created a user named dynawo_developer. You can the install Dyna&omega;o inside the container with the following command:
+You need to enable sharing of your C drive, follow official instructions [here](https://docs.docker.com/docker-for-windows/#shared-drives-on-demand). Inside the container we created a user named dynawo_developer. You can then install Dyna&omega;o inside the container with the following command:
 
 ``` bash
 dynawo_developer@contaiderID:~$> /opt/install_dynawo.sh --prefix MY_DYNAWO_PATH
