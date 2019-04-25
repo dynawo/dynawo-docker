@@ -45,10 +45,21 @@ Under the [Users](https://github.com/dynawo/dynawo-docker/tree/master/Users) fol
 $> docker run -it dynawo/dynawo
 ```
 
-The previous command is a very basic one to just test Dyna&omega;o very quickly. **We recommend** you to create a container by sharing a folder of your host machine so that you can access it inside and outside the container to create your own test cases. You can launch the following command (**`FOLDER_PATH` needs to be modified with appropriate value and should exist**):
+The previous command is a very basic one to just test Dyna&omega;o very quickly. **We recommend** you to create a container by sharing a folder of your host machine so that you can access it inside and outside the container to create your own test cases. You can launch the following command (**`FOLDER_PATH` needs to be modified with appropriate value**):
+
+#### For Linux, Unix and Windows Docker Toolbox (with Docker Quickstart Terminal)
+
 ``` bash
 $> docker run -it -e LOCAL_USER_ID=`id -u $USER` -e LOCAL_GROUP_ID=`id -g $USER` -v FOLDER_PATH:/home/dynawo_user/SharedFolder dynawo/dynawo
 ```
+
+#### For Windows Docker Desktop CE
+
+``` bash
+> docker run -it -v FOLDER_PATH:/home/dynawo_user/SharedFolder dynawo/dynawo
+```
+
+For `FOLDER_PATH` syntax on Windows you can find help [here](https://github.com/dynawo/dynawo-docker/blob/master/Users/ShareFoldersWindows.md).
 
 Once inside the container the user can use the `dynawo` alias and launch:
 ``` bash
