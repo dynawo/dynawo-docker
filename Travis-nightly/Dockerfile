@@ -70,18 +70,17 @@ RUN git clone https://github.com/dynawo/dynawo.git dynawo \
 && echo $'#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
 \n\
-export OPENMODELICA_VERSION=1_9_4\n\
-export SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
-export INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
+export DYNAWO_SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
+export DYNAWO_INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
 \n\
 export DYNAWO_LOCALE=en_GB\n\
-export RESULTS_SHOW=false\n\
-export BROWSER=xdg-open\n\
+export DYNAWO_RESULTS_SHOW=false\n\
+export DYNAWO_BROWSER=xdg-open\n\
 \n\
-export NB_PROCESSORS_USED=1\n\
+export DYNAWO_NB_PROCESSORS_USED=1\n\
 \n\
-export BUILD_TYPE=Release\n\
-export CXX11_ENABLED=YES\n\
+export DYNAWO_BUILD_TYPE=Release\n\
+export DYNAWO_CXX11_ENABLED=YES\n\
 \n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
@@ -99,11 +98,9 @@ FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 ENV USER "dynawo_travis"
-ENV ADEPT_VERSION_1 "1.1"
-ENV ADEPT_VERSION_2 "2.0.5"
+ENV ADEPT_VERSION "2.0.5"
 ENV SUITE_SPARSE_VERSION "4.5.4"
-ENV SUNDIALS_VERSION_1 "4.0.2"
-ENV SUNDIALS_VERSION_2 "4.1.0"
+ENV SUNDIALS_VERSION "4.1.0"
 ENV XERCESC_VERSION "3.2.2"
 ENV XERCESC_VERSION_SHORT "3"
 ENV CPPLINT_VERSION "1.3.0"
@@ -143,12 +140,12 @@ RUN dnf upgrade -y \
   unzip \
   gcovr \
   libcurl-devel \
+  w3m \
+  vim \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
-&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION_1}.tar.gz -P /opt \
-&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION_2}.tar.gz -P /opt \
-&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION_1}.tar.gz -P /opt \
-&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION_2}.tar.gz -P /opt \
+&& wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
+&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
 && wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
 && wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \

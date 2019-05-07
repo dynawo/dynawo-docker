@@ -70,19 +70,19 @@ RUN git clone https://github.com/dynawo/dynawo.git dynawo \
 && echo $'#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
 \n\
-export SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
-export INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
+export DYNAWO_SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
+export DYNAWO_INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
 \n\
 export DYNAWO_LOCALE=en_GB\n\
-export RESULTS_SHOW=false\n\
-export BROWSER=xdg-open\n\
+export DYNAWO_RESULTS_SHOW=false\n\
+export DYNAWO_BROWSER=xdg-open\n\
 \n\
-export NB_PROCESSORS_USED=1\n\
+export DYNAWO_NB_PROCESSORS_USED=1\n\
 \n\
-export BUILD_TYPE=Debug\n\
-export CXX11_ENABLED=YES\n\
+export DYNAWO_BUILD_TYPE=Debug\n\
+export DYNAWO_CXX11_ENABLED=YES\n\
 \n\
-export THIRD_PARTY_INSTALL_DIR=/opt/dynawo/3rParty\
+export DYNAWO_THIRD_PARTY_INSTALL_DIR=/opt/dynawo/3rParty\
 \n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
