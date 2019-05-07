@@ -30,24 +30,26 @@ install_dynawo() {
     mkdir -p $PREFIX_PATH
   fi
   cd $PREFIX_PATH
-  git clone https://github.com/dynawo/dynawo.git dynawo
+  if [ ! -d "dynawo" ]; then
+    git clone https://github.com/dynawo/dynawo.git dynawo
+  fi
   cd dynawo
   echo '#!/bin/bash
-  export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 
-  export SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source
-  export INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
+export DYNAWO_SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source
+export DYNAWO_INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
 
-  export DYNAWO_LOCALE=en_GB
-  export RESULTS_SHOW=false
-  export BROWSER=xdg-open
+export DYNAWO_LOCALE=en_GB
+export DYNAWO_RESULTS_SHOW=false
+export DYNAWO_BROWSER=xdg-open
 
-  export NB_PROCESSORS_USED=$(($(nproc --all)/2))
+export DYNAWO_NB_PROCESSORS_USED=$(($(nproc --all)/2))
 
-  export BUILD_TYPE=Release
-  export CXX11_ENABLED=YES
+export DYNAWO_BUILD_TYPE=Release
+export DYNAWO_CXX11_ENABLED=YES
 
-  $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
+$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
   chmod +x myEnvDynawo.sh
   ./myEnvDynawo.sh build-omcDynawo
   ./myEnvDynawo.sh build-3rd-party-version
