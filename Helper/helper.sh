@@ -51,7 +51,7 @@ image_exists() {
     echo "image_exists needs a name of image as argument."
     exit 1
   fi
-  local test_image_name=$(docker images --format "{{.Repository}}" | sort | uniq  | grep -w "${1}$")
+  local test_image_name=$(docker images --format "{{.Repository}}" | sort | uniq  | grep -w "^${1}$")
   if [ "$test_image_name" ]; then
     return 0
   else
