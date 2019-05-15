@@ -48,6 +48,7 @@ container_name=dynawo
 image_name=dynawo
 
 MODE=""
+USER_FOLDER=""
 
 while (($#)); do
   case "$1" in
@@ -75,6 +76,12 @@ while (($#)); do
       ;;
   esac
 done
+
+if [ -z "$USER_FOLDER" ]; then
+  echo "You should give a folder to share."
+  usage
+  exit 1
+fi
 
 case $MODE in
   create)

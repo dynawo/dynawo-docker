@@ -13,10 +13,12 @@
 if [ ! -z "$USER_NAME" ]; then
   usermod -aG wheel $USER_NAME
   sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers
+  echo 'Defaults    env_keep += "http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY"' >> /etc/sudoers
   exec /usr/local/bin/gosu $USER_NAME "$@"
 elif [ ! -z "$(grep dynawo_developer /etc/passwd)" ]; then
   usermod -aG wheel dynawo_developer
   sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers
+  echo 'Defaults    env_keep += "http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY"' >> /etc/sudoers
   exec /usr/local/bin/gosu dynawo_developer "$@"
 else
   exec "$@"

@@ -17,6 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container with a shared folder from your host machine.
 
   where OPTIONS can be one of the following:
+    --folder (-d) myfolder              folder path to share inside docker container (mandatory).
     --container-name (-c) mycontainer   container name to be created (default: dynawo).
     --image-name (-i) myimage           image name (default: dynawo)
     --help                         print this message.
@@ -26,8 +27,14 @@ usage() {
 container_name=""
 image_name=""
 
+USER_FOLDER=$HOME
+
 while (($#)); do
   case "$1" in
+    --folder|-d)
+      USER_FOLDER=${2%/}
+      shift 2
+      ;;
     --help|-h)
       usage
       exit 0
@@ -68,7 +75,28 @@ fi
 
 if ! `container_exists $container_name`; then
   if `image_exists $image_name`; then
+    docker_share_option=""
+    if [ "${USER_FOLDER/#\~/$HOME}" = "$HOME" ]; then
+      docker_share_option=$(echo -n "-v $USER_FOLDER:/home/dynawo_user")
+    else
+      docker_share_option=$(echo -n "-v $USER_FOLDER:/home/dynawo_user/$(basename $USER_FOLDER)")
+    fi
+    docker_display_option=""
+    if [ "`uname`" = "Linux" ]; then
+      docker_display_option=$(echo -n "-e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix")
+    elif [ "`uname`" = "Darwin" ]; then
+      echo "OS coming soon."
+      exit 1
+    else
+      echo "OS not supported."
+      exit 1
+    fi
     docker run -it -d --name=$container_name \
+    -e LOCAL_USER_ID=`id -u $USER` \
+    -e LOCAL_GROUP_ID=`id -g $USER` \
+    $docker_display_option \
+    $docker_share_option \
+     \
     $image_name
   else
     echo "You specified an image name that is not existing."

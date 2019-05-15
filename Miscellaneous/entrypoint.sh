@@ -44,7 +44,9 @@ case $DOCKER_OS in
     ;;
 esac
 
+echo 'Defaults    env_keep += "http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY"' >> /etc/sudoers
+
 chown -R dynawo_user:dynawo_user /home/dynawo_user
-chown -R dynawo_user:dynawo_user /opt/install_dynawo.sh
+chown -R dynawo_user:dynawo_user /opt
 
 exec /usr/local/bin/gosu dynawo_user "$@"

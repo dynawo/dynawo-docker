@@ -11,6 +11,49 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 #
 
-container_name=dynawo_travis_container
+source ../Helper/helper.sh
 
-docker exec -it -u dynawo_travis $container_name bash
+usage() {
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
+
+  where OPTIONS can be one of the following:
+    --name myname      container name to connect to (default: dynawo)
+    --help             print this message.
+"
+}
+
+connect_to_container() {
+  if `container_exists $container_name`; then
+    if ! `container_is_running $container_name`; then
+      docker start $container_name
+    fi
+    docker exec -it -u dynawo_travis $container_name bash
+  else
+    echo "You specified a container $container_name that is not created."
+    echo "List of available containers:"
+    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+    exit 1
+  fi
+}
+
+container_name=dynawo-travis
+
+while (($#)); do
+  case "$1" in
+    --help)
+      usage
+      exit 0
+      ;;
+    --name)
+      container_name=$2
+      shift 2
+      ;;
+    *)
+      echo "$1: invalid option."
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+connect_to_container
