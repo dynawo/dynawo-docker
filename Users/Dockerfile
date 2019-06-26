@@ -60,6 +60,7 @@ RUN dnf upgrade -y \
   curl \
   libcurl-devel \
   dpkg \
+  bash-completion \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
@@ -72,11 +73,12 @@ RUN useradd -l -m -d /home/${USER} --user-group ${USER}
 
 USER ${USER}
 
-ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
-
 WORKDIR /home/${USER}
 
-RUN git clone https://github.com/dynawo/dynawo.git dynawo \
+ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
+
+RUN cat version.json | grep sha \
+&& git clone https://github.com/dynawo/dynawo.git dynawo \
 && cd dynawo \
 && echo $'#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
