@@ -112,9 +112,12 @@ RUN dnf upgrade -y \
 && dnf install -y \
   blas-devel \
   lapack-devel \
-  lpsolve \
+  lpsolve-devel \
   git \
+  libtool \
   cmake \
+  java-1.8.0-openjdk-devel \
+  expat-devel \
   gcc \
   gcc-c++ \
   gcc-gfortran \
@@ -135,12 +138,14 @@ RUN dnf upgrade -y \
   automake \
   python-devel \
   zlib-devel \
+  qt-devel \
   lcov \
   gem \
   unzip \
   gcovr \
   libcurl-devel \
   w3m \
+  xz \
   vim \
   sudo \
   dpkg \

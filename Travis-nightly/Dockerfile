@@ -112,7 +112,7 @@ RUN dnf upgrade -y \
 && dnf install -y \
   blas-devel \
   lapack-devel \
-  lpsolve \
+  lpsolve-devel \
   git \
   cmake \
   gcc \
@@ -142,6 +142,9 @@ RUN dnf upgrade -y \
   libcurl-devel \
   w3m \
   vim \
+  java-1.8.0-openjdk-devel \
+  expat-devel \
+  libtool \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
