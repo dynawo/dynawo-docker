@@ -145,6 +145,7 @@ RUN dnf upgrade -y \
   java-1.8.0-openjdk-devel \
   expat-devel \
   libtool \
+  bash-completion \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
