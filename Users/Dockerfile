@@ -65,20 +65,21 @@ RUN dnf upgrade -y \
 && rm -rf /var/cache/dnf/*
 
 RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
-  && chmod +x /usr/local/bin/gosu
+&& chmod +x /usr/local/bin/gosu
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN useradd -l -m -d /home/${USER} --user-group ${USER}
 
+ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
+
+RUN cat version.json
+
 USER ${USER}
 
 WORKDIR /home/${USER}
 
-ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
-
-RUN cat version.json | grep sha \
-&& git clone https://github.com/dynawo/dynawo.git dynawo \
+RUN git clone https://github.com/dynawo/dynawo.git dynawo \
 && cd dynawo \
 && echo $'#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
