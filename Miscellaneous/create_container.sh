@@ -17,9 +17,9 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container with a shared folder from your host machine.
 
   where OPTIONS can be one of the following:
-    --container-name (-c) mycontainer   container name to be created (default: dynawo).
+    --container-name (-n) mycontainer   container name to be created (default: dynawo).
     --image-name (-i) myimage           image name (default: dynawo)
-    --help                         print this message.
+    --help                              print this message.
 "
 }
 
@@ -32,13 +32,25 @@ while (($#)); do
       usage
       exit 0
       ;;
-    --container-name|-c)
-      container_name=$2
-      shift 2
+    --container-name|-n)
+      if [ ! -z "$2" ]; then
+        container_name=$2
+        shift 2
+      else
+        echo "'$2': invalid option for --container-name."
+        usage
+        exit 1
+      fi
       ;;
     --image-name|-i)
-      image_name=$2
-      shift 2
+      if [ ! -z "$2" ]; then
+        image_name=$2
+        shift 2
+      else
+        echo "'$2': invalid option for --image-name."
+        usage
+        exit 1
+      fi
       ;;
     *)
       echo "$1: invalid option."

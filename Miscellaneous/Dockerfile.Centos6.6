@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-FROM centos:7.6.1810
+FROM centos:6.6
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 ENV USER "dynawo_user"
@@ -29,59 +29,56 @@ RUN yum upgrade -y \
   java-1.8.0-openjdk \
   blas-devel \
   lapack-devel \
-  lpsolve-devel \
   expat-devel \
   glibc-devel \
   xulrunner-devel \
   sqlite-devel \
-  libarchive-devel \
-  zlib-devel \
   doxygen \
   qt-devel \
   gettext \
   patch \
   wget \
   python-devel \
-  llvm-devel \
   ncurses-devel \
   readline-devel \
   unzip \
-  perl-Digest-MD5 \
   vim \
+  tar \
+  xz \
+  python-lxml \
   libcurl-devel \
   curl \
+  flex \
+  bison \
+  chrpath \
   epel-release
 
-RUN yum install -y python-pip python-psutil dpkg bash-completion
+RUN yum install -y python-pip python-psutil dpkg gtest-devel gmock-devel bash-completion
 
-ENV BOOST_VERSION 1_68_0
+ENV BOOST_VERSION 1_64_0
 
 RUN cd /tmp \
-&& wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_${BOOST_VERSION}.tar.gz \
+&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION//_/.}/boost_${BOOST_VERSION}.tar.gz \
 && tar -xzvf boost_${BOOST_VERSION}.tar.gz \
 && cd boost_${BOOST_VERSION} \
-&& ./bootstrap.sh \
-&& ./b2 install \
-&& echo "/usr/local/lib" > /etc/ld.so.conf.d/boost.conf \
+&& ./bootstrap.sh --prefix=/opt/boost --without-icu --with-libraries=filesystem,program_options,serialization,system,log,iostreams,atomic \
+&& ./b2 -s NO_BZIP2=1 --disable-icu boost.locale.icu=off cxxflags="-fPIC" link=static variant=release install \
 && rm -f /tmp/boost_${BOOST_VERSION}.tar.gz \
 && cd ~ \
-&& rm -rf boost_${BOOST_VERSION}*
+&& rm -rf /tmp/boost_${BOOST_VERSION}*
 
-ENV GOOGLETEST_VERSION 1.8.1
+ENV ZLIB_VERSION 1.2.11
 
 RUN cd /tmp \
-&& wget https://github.com/google/googletest/archive/release-${GOOGLETEST_VERSION}.tar.gz \
-&& tar -xzvf release-${GOOGLETEST_VERSION}.tar.gz \
-&& cd googletest-release-${GOOGLETEST_VERSION} \
-&& mkdir build \
-&& cd build \
-&& cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCVF_VERSION:STRING=1.9.0 .. \
+&& wget https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz \
+&& tar xzf zlib-${ZLIB_VERSION}.tar.gz \
+&& cd zlib-${ZLIB_VERSION} \
+&& CFLAGS="-fPIC" ./configure --static --prefix=/opt/zlib \
 && make \
 && make install \
-&& echo "/usr/local/lib64" > /etc/ld.so.conf.d/gtest.conf \
-&& rm -f /tmp/release-${GOOGLETEST_VERSION}.tar.gz \
+&& rm -f /tmp/zlib-${ZLIB_VERSION}.tar.gz \
 && cd ~ \
-&& rm -rf /tmp/googletest-release-${GOOGLETEST_VERSION}*
+&& rm -rf /tmp/zlib-${ZLIB_VERSION}*
 
 ENV LCOV_VERSION 1.13
 
@@ -103,9 +100,26 @@ RUN cd /tmp \
 && cd cmake-${CMAKE_VERSION} \
 && ./bootstrap \
 && make \
-&& make install
+&& make install \
+&& rm -f /tmp/cmake-${CMAKE_VERSION}.tar.gz  \
+&& cd ~ \
+&& rm -rf /tmp/cmake-${CMAKE_VERSION}*
 
-RUN ldconfig
+ENV LIBARCHIVE_VERSION 3.3.3
+
+RUN cd /tmp \
+&& wget https://libarchive.org/downloads/libarchive-${LIBARCHIVE_VERSION}.tar.gz \
+&& tar xzf libarchive-${LIBARCHIVE_VERSION}.tar.gz \
+&& cd libarchive-${LIBARCHIVE_VERSION} \
+&& mkdir build-cmake \
+&& cd build-cmake \
+&& CFLAGS="-fPIC" cmake .. -DCMAKE_INSTALL_PREFIX=/opt/libarchive -DCMAKE_BUILD_TYPE=Release -DENABLE_BZip2=OFF -DENABLE_LZ4=OFF -DENABLE_LZMA=OFF -DENABLE_NETTLE=OFF -DENABLE_OPENSSL=OFF -DENABLE_EXPAT=OFF -DCMAKE_PREFIX_PATH=/opt/zlib \
+&& make \
+&& make install \
+&& rm -f /opt/libarchive/lib/*.so* \
+&& rm -f /tmp/libarchive-${LIBARCHIVE_VERSION}.tar.gz \
+&& cd ~ \
+&& rm -rf /tmp/libarchive-${LIBARCHIVE_VERSION}*
 
 RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
   && chmod +x /usr/local/bin/gosu
@@ -113,8 +127,6 @@ RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/dow
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 RUN useradd -l -m -d /home/${USER} --user-group ${USER}
-
-COPY install_dynawo.sh /opt
 
 WORKDIR /home/${USER}
 

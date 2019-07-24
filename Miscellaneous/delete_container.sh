@@ -17,7 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name myname      container name to delete (mandatory)
+    --name (-n) myname      container name to delete (mandatory)
     --help             print this message.
 "
 }
@@ -30,9 +30,15 @@ while (($#)); do
       usage
       exit 0
       ;;
-    --name)
-      container_name=$2
-      shift 2
+    --name|-n)
+      if [ ! -z "$2" ]; then
+        container_name=$2
+        shift 2
+      else
+        echo "'$2': invalid option for --name."
+        usage
+        exit 1
+      fi
       ;;
     *)
       echo "$1: invalid option."
