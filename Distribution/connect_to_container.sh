@@ -14,15 +14,29 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname      image name to delete (mandatory)
+    --name myname      container name to connect to (default: dynawo)
     --help             print this message.
 "
 }
 
-image_name=""
+connect_to_container() {
+  if `container_exists $container_name`; then
+    if ! `container_is_running $container_name`; then
+      docker start $container_name
+    fi
+    docker exec -it -u dynawo_distribution $container_name bash
+  else
+    echo "You specified a container $container_name that is not created."
+    echo "List of available containers:"
+    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+    exit 1
+  fi
+}
+
+container_name=dynawo-distribution
 
 while (($#)); do
   case "$1" in
@@ -30,15 +44,9 @@ while (($#)); do
       usage
       exit 0
       ;;
-    --name|-n)
-      if [ ! -z "$2" ]; then
-        image_name=$2
-        shift 2
-      else
-        echo "'$2': invalid option for --name."
-        usage
-        exit 1
-      fi
+    --name)
+      container_name=$2
+      shift 2
       ;;
     *)
       echo "$1: invalid option."
@@ -48,9 +56,4 @@ while (($#)); do
   esac
 done
 
-if [ ! -z "$image_name" ]; then
-  delete_image $image_name
-else
-  usage
-  exit 1
-fi
+connect_to_container

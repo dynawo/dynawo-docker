@@ -14,15 +14,24 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname      image name to delete (mandatory)
+    --name myname      image name created (default: dynawo)
     --help             print this message.
 "
 }
 
-image_name=""
+build_image() {
+  if ! `image_exists $image_name`; then
+    docker build -t $image_name --no-cache=true .
+  else
+    echo "Image $image_name already exists. You can delete it with: ./delete_image.sh --name $image_name"
+    exit 1
+  fi
+}
+
+image_name=dynawo-distribution
 
 while (($#)); do
   case "$1" in
@@ -30,15 +39,9 @@ while (($#)); do
       usage
       exit 0
       ;;
-    --name|-n)
-      if [ ! -z "$2" ]; then
-        image_name=$2
-        shift 2
-      else
-        echo "'$2': invalid option for --name."
-        usage
-        exit 1
-      fi
+    --name)
+      image_name=$2
+      shift 2
       ;;
     *)
       echo "$1: invalid option."
@@ -48,9 +51,4 @@ while (($#)); do
   esac
 done
 
-if [ ! -z "$image_name" ]; then
-  delete_image $image_name
-else
-  usage
-  exit 1
-fi
+build_image
