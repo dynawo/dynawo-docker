@@ -7,84 +7,10 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-FROM centos:6.6 as builder
-LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
-
-ENV USER "dynawo_distribution"
-
-RUN yum upgrade -y \
-&& yum update -y \
-&& yum install -y \
-  git \
-  gcc \
-  gcc-c++ \
-  gcc-gfortran \
-  autoconf \
-  automake \
-  make \
-  libtool \
-  cmake \
-  hwloc \
-  java-1.8.0-openjdk-devel \
-  blas-devel \
-  lapack-devel \
-  expat-devel \
-  glibc-devel \
-  sqlite-devel \
-  libarchive-devel \
-  zlib-devel \
-  doxygen \
-  gettext \
-  patch \
-  wget \
-  python-devel \
-  ncurses-devel \
-  readline-devel \
-  perl-Digest-MD5 \
-  vim \
-  python-pip \
-  python-psutil \
-  xz \
-  tar \
-  rsync \
-  python-lxml \
-  flex \
-  bison
-
-RUN useradd -m -d /home/${USER} --user-group ${USER} \
-&& chown -R ${USER} /opt
-
-USER ${USER}
-
-WORKDIR /home/${USER}
-
-RUN git clone https://github.com/dynawo/dynawo.git dynawo \
-&& cd dynawo \
-&& echo $'#!/bin/bash \n\
-export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
-\n\
-export DYNAWO_SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
-export DYNAWO_INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
-\n\
-export DYNAWO_LOCALE=en_GB\n\
-export DYNAWO_RESULTS_SHOW=false\n\
-export DYNAWO_BROWSER=xdg-open\n\
-\n\
-export DYNAWO_NB_PROCESSORS_USED=1\n\
-\n\
-export DYNAWO_BUILD_TYPE=Release\n\
-export DYNAWO_CXX11_ENABLED=NO\n\
-\n\
-$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
-&& chmod +x myEnvDynawo.sh \
-&& ./myEnvDynawo.sh build-omcDynawo \
-&& rm -rf /opt/OpenModelica/Source \
-&& rm -rf /opt/OpenModelica/Install/share \
-&& cd .. \
-&& rm -rf dynawo
-
 FROM centos:6.6
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+
+ARG GITHUB_TOKEN
 
 ENV USER "dynawo_distribution"
 
@@ -183,13 +109,47 @@ RUN cd /tmp \
 && cd ~ \
 && rm -rf /tmp/libarchive-${LIBARCHIVE_VERSION}*
 
-RUN useradd -m -d /home/${USER} --user-group ${USER} \
+RUN useradd -l -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt
 
-COPY --from=builder /opt/OpenModelica /opt/OpenModelica
+ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
+
+RUN cat version.json
 
 USER ${USER}
 
 WORKDIR /home/${USER}
+
+RUN git clone https://github.com/dynawo/dynawo.git dynawo \
+&& cd dynawo \
+&& echo $'#!/bin/bash \n\
+export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+\n\
+export DYNAWO_SRC_OPENMODELICA=/opt/OpenModelica/Source\n\
+export DYNAWO_INSTALL_OPENMODELICA=/opt/OpenModelica/Install\n\
+\n\
+export DYNAWO_LOCALE=en_GB\n\
+export DYNAWO_RESULTS_SHOW=false\n\
+export DYNAWO_BROWSER=xdg-open\n\
+\n\
+export DYNAWO_NB_PROCESSORS_USED=1\n\
+\n\
+export DYNAWO_BUILD_TYPE=Release\n\
+export DYNAWO_CXX11_ENABLED=NO\n\
+export DYNAWO_LIBRARY_TYPE=STATIC\n\
+\n\
+export DYNAWO_BOOST_HOME=/opt/boost\n\
+export DYNAWO_LIBARCHIVE_HOME=/opt/libarchive\n\
+export DYNAWO_ZLIB_HOME=/opt/zlib\n\
+\n\
+export DYNAWO_BOOST_USE_STATIC=ON\n\
+\n\
+$DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
+&& chmod +x myEnvDynawo.sh \
+&& git checkout $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep tag_name | cut -d '"' -f 4) \
+&& ./myEnvDynawo.sh build-user \
+&& ./myEnvDynawo.sh distrib-omc \
+&& version=$(./myEnvDynawo.sh version | cut -f1 -d' ') \
+&& curl -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_omc_V${version}.zip --data-binary @distributions/Dynawo_omc_V${version}.zip
 
 CMD ["/bin/bash"]
