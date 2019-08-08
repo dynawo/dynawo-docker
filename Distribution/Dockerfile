@@ -150,8 +150,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-user \
 && ./myEnvDynawo.sh distrib-omc \
 && version=$(./myEnvDynawo.sh version | cut -f1 -d' ') \
-&& echo $GITHUB_TOKEN \
-&& echo $version \
-&& curl -v -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_omc_V${version}.zip --data-binary @distributions/Dynawo_omc_V${version}.zip
+&& export GITHUB_TOKEN=$GITHUB_TOKEN \
+&& curl -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_omc_V${version}.zip --data-binary @distributions/Dynawo_omc_V${version}.zip
 
 CMD ["/bin/bash"]
