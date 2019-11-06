@@ -105,7 +105,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && rm -rf OpenModelica/Source \
 && rm -rf build \
 && rm -rf OpenModelica/Install/share \
-&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 >> ~/.bashrc
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0
 
 WORKDIR /home/${USER}/dynawo
 
