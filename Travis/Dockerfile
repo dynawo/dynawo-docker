@@ -149,7 +149,7 @@ RUN dnf upgrade -y \
 && wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
-&& mkdir -p /opt/3/sources/ && mv xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
+&& mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
