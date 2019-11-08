@@ -90,7 +90,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
 && rm -rf /opt/OpenModelica/Source \
 && rm -rf /opt/OpenModelica/Install/share \
-&& ./myEnvDynawo.sh build-3rd-party-version \
+&& ./myEnvDynawo.sh build-3rd-party \
 && cd .. \
 && rm -rf dynawo
 
@@ -152,6 +152,7 @@ RUN dnf upgrade -y \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
+&& mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \

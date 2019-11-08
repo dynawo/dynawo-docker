@@ -99,7 +99,7 @@ export DYNAWO_CXX11_ENABLED=YES\n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
-&& ./myEnvDynawo.sh build-3rd-party-version \
+&& ./myEnvDynawo.sh build-3rd-party \
 && ./myEnvDynawo.sh build-dynawo \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \

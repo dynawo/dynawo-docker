@@ -89,7 +89,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
 && rm -rf /opt/OpenModelica/Source \
 && rm -rf /opt/OpenModelica/Install/share \
-&& ./myEnvDynawo.sh build-3rd-party-version \
+&& ./myEnvDynawo.sh build-3rd-party \
 && cd .. \
 && rm -rf dynawo
 
