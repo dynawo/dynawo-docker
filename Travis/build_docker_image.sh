@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name myname      image name created (default: dynawo)
-    --help             print this message.
+    --name (-n) myname      image name created (default: dynawo-travis)
+    --help (-h)             print this message.
 "
 }
 
@@ -35,11 +35,11 @@ image_name=dynawo-travis
 
 while (($#)); do
   case "$1" in
-    --help)
+    --help|-h)
       usage
       exit 0
       ;;
-    --name)
+    --name|-n)
       image_name=$2
       shift 2
       ;;

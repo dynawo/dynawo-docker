@@ -7,57 +7,59 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-FROM fedora:29 as builder
-LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+FROM ubuntu:bionic as builder
+MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV USER "dynawo_user"
+ENV USER "dynawo_travis"
 
-RUN dnf upgrade -y \
-&& dnf update -y \
-&& dnf install -y \
-  git \
+ENV TZ=Europe/Paris \
+DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+&& apt-get upgrade -y -q \
+&& apt-get install -y git \
   gcc \
-  gcc-c++ \
-  gcc-gfortran \
+  g++ \
+  gfortran \
   autoconf \
+  pkgconf \
   automake \
   make \
+  sudo \
   libtool \
   cmake \
   hwloc \
-  java-1.8.0-openjdk-devel \
-  blas-devel \
-  lapack-devel \
-  lpsolve-devel \
-  expat-devel \
-  glibc-devel \
-  sqlite-devel \
-  libarchive-devel \
-  zlib-devel \
+  openjdk-8-jdk \
+  libblas-dev \
+  liblpsolve55-dev \
+  libarchive-dev \
   doxygen \
-  qt-devel \
+  liblapack-dev \
+  libexpat1-dev \
+  libsqlite3-dev \
+  zlib1g-dev \
   gettext \
   patch \
-  wget \
-  python-devel \
-  ncurses-devel \
-  readline-devel \
-  unzip \
-  perl-Digest-MD5 \
-  vim \
-  gcovr \
-  lcov \
   python-pip \
-  python-psutil \
-  boost-devel \
-  gtest-devel \
-  gmock-devel \
-  xz \
-  rsync \
+  libncurses5-dev \
+  libreadline-dev \
+  libdigest-perl-md5-perl \
+  unzip \
+  lcov \
+  libboost-all-dev \
+  qt4-qmake \
+  qt4-dev-tools \
+  lsb-release \
+  libxml2-utils \
   python-lxml \
-  bash-completion \
-&& dnf clean all \
-&& rm -rf /var/cache/dnf/*
+  python-psutil \
+  vim \
+  wget \
+  rsync \
+  libcurl4-openssl-dev \
+  curl \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt
@@ -80,17 +82,14 @@ export DYNAWO_BROWSER=xdg-open\n\
 \n\
 export DYNAWO_NB_PROCESSORS_USED=1\n\
 \n\
-export DYNAWO_BUILD_TYPE=Debug\n\
+export DYNAWO_BUILD_TYPE=Release\n\
 export DYNAWO_CXX11_ENABLED=YES\n\
-\n\
-export DYNAWO_THIRD_PARTY_INSTALL_DIR=/opt/dynawo/3rParty\
 \n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
 && rm -rf /opt/OpenModelica/Source \
 && rm -rf /opt/OpenModelica/Install/share \
-&& ./myEnvDynawo.sh build-3rd-party \
 && cd .. \
 && rm -rf dynawo
 
@@ -98,10 +97,10 @@ WORKDIR /home/${USER}/dynawo
 
 CMD ["/bin/bash"]
 
-FROM fedora:29
-LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+FROM ubuntu:bionic
+MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV USER "dynawo_user"
+ENV USER "dynawo_travis"
 ENV ADEPT_VERSION "2.0.5"
 ENV SUITE_SPARSE_VERSION "4.5.4"
 ENV SUNDIALS_VERSION "4.1.0"
@@ -111,45 +110,61 @@ ENV CPPLINT_VERSION "1.4.4"
 ENV JQUERY_VERSION "1.3.2"
 ENV FLOT_VERSION "0.6.0"
 ENV BOOST_VERSION "1.64.0"
+ENV BOOST_VERSION_ "1_64_0"
 ENV LIBARCHIVE_VERSION "2.8.0"
 ENV ZLIB_VERSION "1.2.11"
 
-RUN dnf upgrade -y \
-&& dnf update -y \
-&& dnf install -y \
-  blas-devel \
-  lapack-devel \
-  lpsolve \
-  git \
-  cmake \
+ENV TZ=Europe/Paris \
+DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+&& apt-get upgrade -y -q \
+&& apt-get install -y git \
   gcc \
-  gcc-c++ \
-  gcc-gfortran \
-  make \
-  libarchive-devel \
-  gtest-devel \
-  gmock-devel \
-  patch \
-  wget \
-  boost-devel \
-  python \
-  python-lxml \
-  binutils \
-  python-psutil \
+  g++ \
+  gfortran \
   autoconf \
+  pkgconf \
   automake \
-  python-devel \
-  zlib-devel \
-  lcov \
-  gem \
-  unzip \
-  gcovr \
+  make \
   sudo \
-  dpkg \
-&& dnf clean all \
-&& rm -rf /var/cache/dnf/* \
+  libtool \
+  cmake \
+  hwloc \
+  openjdk-8-jdk \
+  libblas-dev \
+  liblpsolve55-dev \
+  libarchive-dev \
+  doxygen \
+  liblapack-dev \
+  libexpat1-dev \
+  libsqlite3-dev \
+  zlib1g-dev \
+  gettext \
+  patch \
+  python-pip \
+  libncurses5-dev \
+  libreadline-dev \
+  libdigest-perl-md5-perl \
+  unzip \
+  lcov \
+  libboost-all-dev \
+  qt4-qmake \
+  qt4-dev-tools \
+  lsb-release \
+  libxml2-utils \
+  python-lxml \
+  python-psutil \
+  vim \
+  wget \
+  rsync \
+  libcurl4-openssl-dev \
+  curl \
+  bash-completion \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
-&& wget https://computation.llnl.gov/projects/sundials/download/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
+&& wget https://github.com/LLNL/sundials/releases/download/v${SUNDIALS_VERSION}/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
 && wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
 && wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
@@ -157,31 +172,14 @@ RUN dnf upgrade -y \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
 && wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
-&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
-&& wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
-&& mkdir -p /opt/sonar \
-&& wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
-&& unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
-&& cp /opt/sonar/build-wrapper-linux-x86/libinterceptor-x86_64.so /opt/sonar/build-wrapper-linux-x86/libinterceptor-haswell.so \
-&& wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip -P /opt \
-&& unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar
+&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION_}.tar.gz -P /opt \
+&& wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt
 
-RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
-  && chmod +x /usr/local/bin/gosu
-
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-
-RUN useradd -l -m -d /home/${USER} --user-group ${USER} \
-&& chown -R ${USER} /opt \
-&& gem install coveralls-lcov
+RUN useradd -m -d /home/${USER} --user-group ${USER} \
+&& chown -R ${USER} /opt
 
 COPY --from=builder /opt/OpenModelica /opt/OpenModelica
-COPY --from=builder /opt/dynawo/3rParty /opt/dynawo/3rParty
 
-COPY install_dynawo.sh /opt
+USER ${USER}
 
 WORKDIR /home/${USER}
-
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-CMD ["/bin/bash"]

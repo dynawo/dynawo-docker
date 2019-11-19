@@ -106,9 +106,12 @@ ENV SUITE_SPARSE_VERSION "4.5.4"
 ENV SUNDIALS_VERSION "4.1.0"
 ENV XERCESC_VERSION "3.2.2"
 ENV XERCESC_VERSION_SHORT "3"
-ENV CPPLINT_VERSION "1.3.0"
+ENV CPPLINT_VERSION "1.4.4"
 ENV JQUERY_VERSION "1.3.2"
 ENV FLOT_VERSION "0.6.0"
+ENV BOOST_VERSION "1.64.0"
+ENV LIBARCHIVE_VERSION "2.8.0"
+ENV ZLIB_VERSION "1.2.11"
 
 RUN dnf upgrade -y \
 && dnf update -y \
@@ -150,6 +153,9 @@ RUN dnf upgrade -y \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
+&& wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
+&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
+&& wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
