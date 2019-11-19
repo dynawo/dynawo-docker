@@ -51,9 +51,7 @@ export DYNAWO_CXX11_ENABLED=YES
 
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
   chmod +x myEnvDynawo.sh
-  ./myEnvDynawo.sh build-omcDynawo
-  ./myEnvDynawo.sh build-3rd-party
-  ./myEnvDynawo.sh build-dynawo
+  ./myEnvDynawo.sh build-user
   ./myEnvDynawo.sh deploy-autocompletion --deploy
 }
 

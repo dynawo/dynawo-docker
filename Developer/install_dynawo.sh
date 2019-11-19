@@ -15,8 +15,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to install Dynawo in a folder.
 
   where OPTIONS can be one of the following:
-    --prefix mypath        prefix path to install Dynawo (mandatory).
-    --help                 print this message.
+    --prefix (-p) mypath        prefix path to install Dynawo (mandatory).
+    --help (-h)                 print this message.
 "
 }
 
@@ -40,9 +40,9 @@ export DYNAWO_INSTALL_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Install
 
 export DYNAWO_LOCALE=en_GB
 export DYNAWO_RESULTS_SHOW=false
-export DYNAWO_BROWSER=xdg-open
+export DYNAWO_BROWSER=firefox
 
-export DYNAWO_NB_PROCESSORS_USED=$(($(nproc --all)/2))
+export DYNAWO_NB_PROCESSORS_USED=1
 
 export DYNAWO_BUILD_TYPE=Release
 export DYNAWO_CXX11_ENABLED=YES
@@ -57,12 +57,12 @@ MODE=""
 
 while (($#)); do
   case "$1" in
-    --prefix)
+    --prefix|-p)
       MODE=install
       USER_FOLDER=${2%/}
       shift 2
       ;;
-    --help)
+    --help|-h)
       usage
       exit 0
       ;;

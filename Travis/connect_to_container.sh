@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name myname      container name to connect to (default: dynawo)
-    --help             print this message.
+    --name (-n) myname      container name to connect to (default: dynawo-travis)
+    --help (-h)             print this message.
 "
 }
 
@@ -40,11 +40,11 @@ container_name=dynawo-travis
 
 while (($#)); do
   case "$1" in
-    --help)
+    --help|-h)
       usage
       exit 0
       ;;
-    --name)
+    --name|-n)
       container_name=$2
       shift 2
       ;;

@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name myname      container name to connect to (default: dynawo)
-    --help             print this message.
+    --name -(n)        fedora or bionic (mandatory).
+    --help (-h)        print this message.
 "
 }
 
@@ -36,17 +36,21 @@ connect_to_container() {
   fi
 }
 
-container_name=dynawo-travis-nightly
-
 while (($#)); do
   case "$1" in
-    --help)
+    --help|-h)
       usage
       exit 0
       ;;
-    --name)
-      container_name=$2
-      shift 2
+    --name|-n)
+      if [ "$2" = "fedora" -o "$2" = "bionic" ]; then
+        distrib_name=$2
+        shift 2
+      else
+        echo "$2: invalid option for name."
+        usage
+        exit 1
+      fi
       ;;
     *)
       echo "$1: invalid option."
@@ -55,5 +59,7 @@ while (($#)); do
       ;;
   esac
 done
+
+container_name=dynawo-travis-nightly-$distrib_name
 
 connect_to_container
