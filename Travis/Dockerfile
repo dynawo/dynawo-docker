@@ -153,6 +153,7 @@ RUN dnf upgrade -y \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
+&& wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
 && wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
 && wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
