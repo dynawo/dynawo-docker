@@ -57,6 +57,7 @@ RUN dnf upgrade -y \
   python-lxml \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
+&& pip install coverage
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt
