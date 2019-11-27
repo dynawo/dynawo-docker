@@ -57,7 +57,6 @@ RUN dnf upgrade -y \
   python-lxml \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
-&& pip install coverage
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt
@@ -163,7 +162,8 @@ RUN dnf upgrade -y \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
 && cp /opt/sonar/build-wrapper-linux-x86/libinterceptor-x86_64.so /opt/sonar/build-wrapper-linux-x86/libinterceptor-haswell.so \
 && wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip -P /opt \
-&& unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar
+&& unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar \
+&& pip install coverage
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
 && chown -R ${USER} /opt \
