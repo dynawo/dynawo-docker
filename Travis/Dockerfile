@@ -104,6 +104,8 @@ ENV USER "dynawo_travis"
 ENV ADEPT_VERSION "2.0.5"
 ENV SUITE_SPARSE_VERSION "4.5.4"
 ENV SUNDIALS_VERSION "4.1.0"
+ENV SUITE_SPARSE_VERSION2 "5.3.0"
+ENV SUNDIALS_VERSION2 "5.0.0"
 ENV XERCESC_VERSION "3.2.2"
 ENV XERCESC_VERSION_SHORT "3"
 ENV CPPLINT_VERSION "1.4.4"
@@ -149,6 +151,8 @@ RUN dnf upgrade -y \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/LLNL/sundials/releases/download/v${SUNDIALS_VERSION}/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
 && wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
+&& wget https://github.com/LLNL/sundials/releases/download/v${SUNDIALS_VERSION2}/sundials-${SUNDIALS_VERSION2}.tar.gz -P /opt \
+&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION2}.tar.gz -P /opt \
 && wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
