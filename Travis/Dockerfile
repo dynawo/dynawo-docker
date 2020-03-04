@@ -114,6 +114,7 @@ ENV FLOT_VERSION "0.6.0"
 ENV BOOST_VERSION "1.64.0"
 ENV LIBARCHIVE_VERSION "2.8.0"
 ENV ZLIB_VERSION "1.2.11"
+ENV SONAR_SCANNER_VERSION "4.3.0.2102"
 
 RUN dnf upgrade -y \
 && dnf update -y \
@@ -165,8 +166,9 @@ RUN dnf upgrade -y \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
 && cp /opt/sonar/build-wrapper-linux-x86/libinterceptor-x86_64.so /opt/sonar/build-wrapper-linux-x86/libinterceptor-haswell.so \
-&& wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip -P /opt \
-&& unzip /opt/sonar-scanner-cli-3.3.0.1492-linux.zip -d /opt/sonar \
+&& wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip -P /opt \
+&& unzip /opt/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip -d /opt/sonar \
+&& mv /opt/sonar/sonar-scanner-${SONAR_SCANNER_VERSION}-linux /opt/sonar/sonar-scanner \
 && pip install coverage
 
 RUN useradd -m -d /home/${USER} --user-group ${USER} \
