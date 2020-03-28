@@ -151,6 +151,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && sed -i 's/1000/100/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomatonConstants.mo \
 && sed -i 's/500/50/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomatonConstants.mo \
 && sed -i 's/1000/100/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomaton.extvar \
+&& sed -i 's#${CMAKE_COMMAND} -E create_symlink <INSTALL_DIR>/bin/omc <INSTALL_DIR>/bin/omcDynawo#cd <INSTALL_DIR>/bin \&\& ln -s -f omc omcDynawo#' dynawo/3rdParty/CMakeLists.txt \
 && ./myEnvDynawo.sh build-user \
 && ./myEnvDynawo.sh distrib-omc \
 && version=$(./myEnvDynawo.sh version | cut -f1 -d' ') \
