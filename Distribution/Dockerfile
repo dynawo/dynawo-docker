@@ -50,6 +50,7 @@ RUN yum upgrade -y \
   flex \
   bison \
   chrpath \
+  sed \
   epel-release
 
 RUN yum install -y python-pip python-psutil dpkg
@@ -147,6 +148,9 @@ export DYNAWO_BOOST_USE_STATIC=ON\n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && git checkout $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep tag_name | cut -d '"' -f 4) \
+&& sed -i 's/1000/100/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomatonConstants.mo \
+&& sed -i 's/500/50/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomatonConstants.mo \
+&& sed -i 's/1000/100/' dynawo/sources/Models/Modelica/Dynawo/Electrical/Controls/Generic/GenericAutomaton.extvar \
 && ./myEnvDynawo.sh build-user \
 && ./myEnvDynawo.sh distrib-omc \
 && version=$(./myEnvDynawo.sh version | cut -f1 -d' ') \
