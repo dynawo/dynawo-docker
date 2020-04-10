@@ -46,10 +46,11 @@ RUN yum upgrade -y \
   tar \
   xz \
   python-lxml \
-  curl \
+  curl-devel \
   flex \
   bison \
   chrpath \
+  sed \
   epel-release
 
 RUN yum install -y python-pip python-psutil dpkg
@@ -86,7 +87,7 @@ RUN cd /tmp \
 && wget https://cmake.org/files/v${CMAKE_VERSION_SHORT}/cmake-${CMAKE_VERSION}.tar.gz \
 && tar xzf cmake-${CMAKE_VERSION}.tar.gz \
 && cd cmake-${CMAKE_VERSION} \
-&& ./bootstrap \
+&& ./bootstrap --system-curl \
 && make \
 && make install \
 && rm -f /tmp/cmake-${CMAKE_VERSION}.tar.gz  \
