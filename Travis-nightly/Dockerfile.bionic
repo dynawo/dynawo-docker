@@ -40,7 +40,8 @@ RUN apt-get update \
   zlib1g-dev \
   gettext \
   patch \
-  python-pip \
+  python3 \
+  python3-pip \
   libncurses5-dev \
   libreadline-dev \
   libdigest-perl-md5-perl \
@@ -51,8 +52,8 @@ RUN apt-get update \
   qt4-dev-tools \
   lsb-release \
   libxml2-utils \
-  python-lxml \
-  python-psutil \
+  python3-lxml \
+  python3-psutil \
   vim \
   wget \
   rsync \
@@ -144,7 +145,8 @@ RUN apt-get update \
   zlib1g-dev \
   gettext \
   patch \
-  python-pip \
+  python3 \
+  python3-pip \
   libncurses5-dev \
   libreadline-dev \
   libdigest-perl-md5-perl \
@@ -155,8 +157,8 @@ RUN apt-get update \
   qt4-dev-tools \
   lsb-release \
   libxml2-utils \
-  python-lxml \
-  python-psutil \
+  python3-lxml \
+  python3-psutil \
   vim \
   wget \
   rsync \
