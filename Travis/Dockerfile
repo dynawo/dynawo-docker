@@ -112,7 +112,7 @@ ENV CPPLINT_VERSION "1.4.4"
 ENV JQUERY_VERSION "1.3.2"
 ENV FLOT_VERSION "0.6.0"
 ENV BOOST_VERSION "1.64.0"
-ENV LIBARCHIVE_VERSION "2.8.0"
+ENV LIBARCHIVE_VERSION "3.4.0"
 ENV ZLIB_VERSION "1.2.11"
 ENV SONAR_SCANNER_VERSION "4.3.0.2102"
 
@@ -161,7 +161,9 @@ RUN dnf upgrade -y \
 && wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
 && wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
+&& mkdir -p /opt/${BOOST_VERSION} && mv boost_${BOOST_VERSION//./_}.tar.gz /opt/${BOOST_VERSION} \
 && wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
+&& mkdir -p /opt/${ZLIB_VERSION} && mv /opt/zlib-${ZLIB_VERSION}.tar.gz /opt/${ZLIB_VERSION} \
 && mkdir -p /opt/sonar \
 && wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip -P /opt \
 && unzip /opt/build-wrapper-linux-x86.zip -d /opt/sonar \
