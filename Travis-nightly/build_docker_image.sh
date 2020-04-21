@@ -56,6 +56,11 @@ while (($#)); do
   esac
 done
 
+if [ -z "$distrib_name" ]; then
+  echo "--name (-n) option is mandatory, with fedora or bionic."
+  exit 1
+fi
+
 image_name=dynawo-travis-nightly-$distrib_name
 
 build_image
