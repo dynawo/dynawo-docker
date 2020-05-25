@@ -161,7 +161,7 @@ RUN dnf upgrade -y \
 && wget https://github.com/cpplint/cpplint/archive/${CPPLINT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
 && wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
-&& mkdir -p /opt/${BOOST_VERSION} && mv boost_${BOOST_VERSION//./_}.tar.gz /opt/${BOOST_VERSION} \
+&& mkdir -p /opt/${BOOST_VERSION} && mv /opt/boost_${BOOST_VERSION//./_}.tar.gz /opt/${BOOST_VERSION} \
 && wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/${ZLIB_VERSION} && mv /opt/zlib-${ZLIB_VERSION}.tar.gz /opt/${ZLIB_VERSION} \
 && mkdir -p /opt/sonar \
