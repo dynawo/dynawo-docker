@@ -113,6 +113,7 @@ ENV CPPLINT_VERSION "1.4.4"
 ENV JQUERY_VERSION "1.3.2"
 ENV FLOT_VERSION "0.6.0"
 ENV BOOST_VERSION "1.64.0"
+ENV BOOST_VERSION_ "1_64_0"
 ENV LIBARCHIVE_VERSION "3.4.0"
 ENV ZLIB_VERSION "1.2.11"
 
@@ -174,8 +175,8 @@ RUN apt-get update \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/3/sources/ && mv /opt/xerces-c-${XERCESC_VERSION}.tar.gz /opt/3/sources/ \
 && wget https://github.com/libarchive/libarchive/archive/v${LIBARCHIVE_VERSION}.tar.gz -P /opt \
-&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//./_}.tar.gz -P /opt \
-&& mkdir -p /opt/${BOOST_VERSION} && mv /opt/boost_${BOOST_VERSION//./_}.tar.gz /opt/${BOOST_VERSION} \
+&& wget https://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION_}.tar.gz -P /opt \
+&& mkdir -p /opt/${BOOST_VERSION} && mv /opt/boost_${BOOST_VERSION_}.tar.gz /opt/${BOOST_VERSION} \
 && wget https://sourceforge.net/projects/libpng/files/zlib/${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz -P /opt \
 && mkdir -p /opt/${ZLIB_VERSION} && mv /opt/zlib-${ZLIB_VERSION}.tar.gz /opt/${ZLIB_VERSION}
 
