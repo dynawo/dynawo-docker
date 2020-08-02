@@ -10,7 +10,7 @@
     This file is part of Dynawo, an hybrid C++/Modelica open source time domain
     simulation tool for power systems.
 -->
-# Dyna&omega;o - An hybrid C++/Modelica time-domain simulation tool for power systems - Docker Images
+# Dyna&omega;o - An hybrid C++/Modelica suite of simulation tools for power systems - Docker Images
 [![MPL-2.0 License](https://img.shields.io/badge/license-MPL_2.0-blue.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/dynawo/dynawo.svg)](https://hub.docker.com/r/dynawo/dynawo)
 
@@ -30,7 +30,7 @@ This repository contains Dyna&omega;o's Docker images.
 <a name="about"></a>
 ## About this repository
 
-**Dyna&omega;o is an open source time domain simulation tool for power systems using the Modelica language. It aims at providing power system stakeholders with a transparent, flexible, interoperable and robust simulation tool that could ease collaboration and cooperation in the power system community**.
+**Dyna&omega;o is an hybrid C++/Modelica open source suite of simulation tools for power systems. It aims at providing power system stakeholders with a transparent, flexible, interoperable and robust suite of simulation tools that could ease collaboration and cooperation in the power system community.**
 To achieve this goal, Dyna&omega;o is based on two mains principles: the use of a high-level modeling language Modelica and a strict separation between modeling and solving parts.
 
 We provide this repository to ease users with [Dyna&omega;o' installation](https://github.com/dynawo/dynawo#build) and provide a quick way to try the simulation tool.
