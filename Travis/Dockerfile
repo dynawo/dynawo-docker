@@ -55,6 +55,7 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
+  libtool \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
