@@ -55,7 +55,6 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
-  libtool \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
@@ -148,6 +147,7 @@ RUN dnf upgrade -y \
   unzip \
   gcovr \
   bash-completion \
+  libtool \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
