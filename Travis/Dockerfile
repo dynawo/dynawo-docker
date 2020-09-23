@@ -152,9 +152,9 @@ RUN dnf upgrade -y \
 && rm -rf /var/cache/dnf/* \
 && wget http://www.met.reading.ac.uk/clouds/adept/adept-${ADEPT_VERSION}.tar.gz -P /opt \
 && wget https://github.com/LLNL/sundials/releases/download/v${SUNDIALS_VERSION}/sundials-${SUNDIALS_VERSION}.tar.gz -P /opt \
-&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
+&& wget --no-check-certificate http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION}.tar.gz -P /opt \
 && wget https://github.com/LLNL/sundials/releases/download/v${SUNDIALS_VERSION2}/sundials-${SUNDIALS_VERSION2}.tar.gz -P /opt \
-&& wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION2}.tar.gz -P /opt \
+&& wget --no-check-certificate http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${SUITE_SPARSE_VERSION2}.tar.gz -P /opt \
 && wget https://github.com/jquery/jquery/archive/${JQUERY_VERSION}.tar.gz -P /opt \
 && wget https://github.com/flot/flot/archive/v${FLOT_VERSION}.tar.gz -P /opt \
 && wget http://archive.apache.org/dist/xerces/c/${XERCESC_VERSION_SHORT}/sources/xerces-c-${XERCESC_VERSION}.tar.gz -P /opt \
