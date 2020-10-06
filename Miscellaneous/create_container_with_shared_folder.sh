@@ -97,7 +97,7 @@ if ! `container_exists $container_name`; then
     if [ "${USER_FOLDER/#\~/$HOME}" = "$HOME" ]; then
       docker_share_option=$(echo -n "-v $USER_FOLDER:/home/dynawo_user")
     else
-      docker_share_option=$(echo -n "-v $USER_FOLDER:/home/dynawo_user/$(basename $USER_FOLDER)")
+      docker_share_option=$(echo -n "-v ${USER_FOLDER/#\~/$HOME}:/home/dynawo_user/$(basename $USER_FOLDER)")
     fi
     docker run -it -d --name=$container_name \
     -e LOCAL_USER_ID=`id -u $USER` \
