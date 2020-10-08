@@ -1,0 +1,81 @@
+# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# See AUTHORS.txt
+# All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+# SPDX-License-Identifier: MPL-2.0
+#
+# This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+FROM centos:8
+LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+
+ENV USER "dynawo_user"
+
+RUN yum upgrade -y \
+&& yum update -y \
+&& yum install -y git \
+  gcc \
+  gcc-c++ \
+  gcc-gfortran \
+  autoconf \
+  automake \
+  make \
+  sudo \
+  libtool \
+  cmake \
+  hwloc \
+  java-1.8.0-openjdk \
+  expat-devel glibc-devel \
+  sqlite-devel \
+  zlib-devel \
+  gettext \
+  patch \
+  wget \
+  llvm-devel \
+  ncurses-devel \
+  readline-devel \
+  unzip \
+  perl-Digest-MD5 \
+  vim \
+  libcurl-devel \
+  curl \
+  epel-release \
+  dnf-plugins-core \
+&& yum install -y https://pkgs.dyn.su/el8/base/x86_64/raven-release-1.0-1.el8.noarch.rpm \
+&& dnf config-manager --set-enabled PowerTools
+
+RUN dnf install -y blas-devel \
+  lapack-devel \
+  libarchive-devel \
+  doxygen \
+  qt5-devel \
+  python3-devel \
+  python3-pip \
+  python3-psutil \
+  dpkg \
+  bash-completion \
+  python3-lxml \
+  bison \
+  flex \
+  gtest-devel \
+  gmock-devel \
+  boost-devel \
+  lcov
+
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
+  && chmod +x /usr/local/bin/gosu
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN useradd -l -m -d /home/${USER} --user-group ${USER}
+
+COPY install_dynawo.sh /opt
+
+WORKDIR /home/${USER}
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+CMD ["/bin/bash"]
+
+ENV LC_ALL=C
