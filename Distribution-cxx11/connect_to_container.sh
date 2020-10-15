@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# Copyright (c) 2020, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +14,29 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name -(n) myname      container name to delete (default: dynawo-distribution)
+    --name (-n) myname      container name to connect to (default: dynawo-distribution-cxx11)
     --help (-h)             print this message.
 "
 }
 
-container_name=dynawo-distribution
+connect_to_container() {
+  if `container_exists $container_name`; then
+    if ! `container_is_running $container_name`; then
+      docker start $container_name
+    fi
+    docker exec -it -u dynawo_distribution $container_name bash
+  else
+    echo "You specified a container $container_name that is not created."
+    echo "List of available containers:"
+    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+    exit 1
+  fi
+}
+
+container_name=dynawo-distribution-cxx11
 
 while (($#)); do
   case "$1" in
@@ -42,4 +56,4 @@ while (($#)); do
   esac
 done
 
-delete_container $container_name
+connect_to_container

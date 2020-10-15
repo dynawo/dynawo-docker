@@ -102,7 +102,7 @@ RUN cd /tmp \
 && cd libarchive-${LIBARCHIVE_VERSION} \
 && mkdir build-cmake \
 && cd build-cmake \
-&& CFLAGS="-fPIC" cmake .. -DCMAKE_INSTALL_PREFIX=/opt/libarchive -DCMAKE_BUILD_TYPE=Release -DENABLE_BZip2=OFF -DENABLE_LZ4=OFF -DENABLE_LZMA=OFF -DENABLE_NETTLE=OFF -DENABLE_OPENSSL=OFF -DENABLE_EXPAT=OFF -DCMAKE_PREFIX_PATH=/opt/zlib \
+&& CFLAGS="-fPIC" cmake .. -DCMAKE_INSTALL_PREFIX=/opt/libarchive -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/zlib -DENABLE_WERROR=OFF -DENABLE_TEST=OFF -DENABLE_NETTLE=OFF -DENABLE_OPENSSL=OFF -DENABLE_ZSTD=OFF -DENABLE_LZ4=OFF -DENABLE_LZO=OFF -DENABLE_LZMA=OFF -DENABLE_BZip2=OFF -DENABLE_LIBXML2=OFF -DENABLE_EXPAT=OFF -DENABLE_PCREPOSIX=OFF -DENABLE_CNG=OFF \
 && make \
 && make install \
 && rm -f /opt/libarchive/lib/*.so* \
@@ -150,9 +150,11 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && git checkout $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep tag_name | cut -d '"' -f 4) \
 && ./myEnvDynawo.sh build-user \
 && ./myEnvDynawo.sh distrib-omc \
+&& ./myEnvDynawo.sh distrib \
 && version=$(./myEnvDynawo.sh version | cut -f1 -d' ') \
 && export GITHUB_TOKEN=$GITHUB_TOKEN \
 && curl -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_Linux_v${version}.zip --data-binary @distributions/Dynawo_omc_V${version}.zip \
+&& curl -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_Linux_minimal_v${version}.zip --data-binary @distributions/Dynawo_V${version}.zip \
 && curl -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/zip" -X POST $(curl -s --request GET https://api.github.com/repos/dynawo/dynawo/releases/latest | grep upload_url | cut -d '"' -f 4 | grep -o ".*assets")?name=Dynawo_Modelica_library_v${version}.zip --data-binary @distributions/Dynawo_Modelica_library_V${version}.zip
 
 CMD ["/bin/bash"]

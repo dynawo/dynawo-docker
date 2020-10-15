@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# Copyright (c) 2020, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,12 +17,12 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname     image name to delete (default: dynawo-distribution)
+    --name (-n) myname     image name to delete (default: dynawo-distribution-cxx11)
     --help (-h)            print this message.
 "
 }
 
-image_name=dynawo-distribution
+image_name=dynawo-distribution-cxx11
 
 while (($#)); do
   case "$1" in
