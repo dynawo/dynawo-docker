@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# Copyright (c) 2020, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +14,15 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname     image name to delete (default: dynawo-distribution)
-    --help (-h)            print this message.
+    --name -(n) myname      container name to delete (default: dynawo-distribution-cxx11)
+    --help (-h)             print this message.
 "
 }
 
-image_name=dynawo-distribution
+container_name=dynawo-distribution-cxx11
 
 while (($#)); do
   case "$1" in
@@ -31,7 +31,7 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      image_name=$2
+      container_name=$2
       shift 2
       ;;
     *)
@@ -42,4 +42,4 @@ while (($#)); do
   esac
 done
 
-delete_image $image_name
+delete_container $container_name

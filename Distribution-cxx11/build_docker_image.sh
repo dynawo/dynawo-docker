@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# Copyright (c) 2020, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +14,24 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname     image name to delete (default: dynawo-distribution)
-    --help (-h)            print this message.
+    --name (-n) myname      image name created (default: dynawo-distribution-cxx11)
+    --help (-h)             print this message.
 "
 }
 
-image_name=dynawo-distribution
+build_image() {
+  if ! `image_exists $image_name`; then
+    docker build --force-rm -t $image_name --no-cache=true .
+  else
+    echo "Image $image_name already exists. You can delete it with: ./delete_image.sh --name $image_name"
+    exit 1
+  fi
+}
+
+image_name=dynawo-distribution-cxx11
 
 while (($#)); do
   case "$1" in
@@ -42,4 +51,4 @@ while (($#)); do
   esac
 done
 
-delete_image $image_name
+build_image
