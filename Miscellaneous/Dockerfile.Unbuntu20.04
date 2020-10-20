@@ -59,6 +59,8 @@ RUN apt update \
   rsync \
   libopenblas-openmp-dev \
   curl \
+  sudo \
+  vim \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 
