@@ -36,7 +36,7 @@ case $DOCKER_OS in
     ;;
   debian|ubuntu)
     usermod -aG sudo dynawo_user
-    sed -i 's/%sudo	ALL=(ALL:ALL) ALL/%sudo	ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
+    sed -i -e 's/%sudo\s\+ALL=(ALL:ALL) ALL/%sudo	ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
     ;;
   *)
     echo "$DOCKER_OS not supported for the moment."
