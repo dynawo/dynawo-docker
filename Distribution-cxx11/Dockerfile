@@ -50,7 +50,7 @@ RUN dnf update -y \
   libcurl-devel \
   bash-completion \
   zip \
-&& curl -L -O https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz && \
+&& curl -L -O https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
 && tar -xf cmake-3.12.0-Linux-x86_64.tar.gz && \
 && rm -f cmake-3.12.0-Linux-x86_64.tar.gz
 
