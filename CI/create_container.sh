@@ -17,8 +17,9 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name -(n)        fedora or bionic (mandatory).
-    --help (-h)        print this message.
+    --container-name (-n) mycontainer   container name created (default: dynawo-ci)
+    --image-name (-i) myimage           image name (default: dynawo-ci)
+    --help (-h)                         print this message.
 "
 }
 
@@ -39,21 +40,22 @@ create_container() {
   fi
 }
 
+container_name=dynawo-ci
+image_name=dynawo-ci
+
 while (($#)); do
   case "$1" in
     --help|-h)
       usage
       exit 0
       ;;
-    --name|-n)
-      if [ "$2" = "fedora" -o "$2" = "bionic" ]; then
-        distrib_name=$2
-        shift 2
-      else
-        echo "$2: invalid option for name."
-        usage
-        exit 1
-      fi
+    --container-name|-n)
+      container_name=$2
+      shift 2
+      ;;
+    --image-name|-i)
+      image_name=$2
+      shift 2
       ;;
     *)
       echo "$1: invalid option."
@@ -62,13 +64,5 @@ while (($#)); do
       ;;
   esac
 done
-
-if [ -z "$distrib_name" ]; then
-  echo "--name (-n) option is mandatory, with fedora or bionic."
-  exit 1
-fi
-
-container_name=dynawo-travis-nightly-$distrib_name
-image_name=dynawo-travis-nightly-$distrib_name
 
 create_container

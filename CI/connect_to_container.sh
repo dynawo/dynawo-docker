@@ -14,24 +14,29 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname      image name created (default: dynawo-travis)
+    --name (-n) myname      container name to connect to (default: dynawo-ci)
     --help (-h)             print this message.
 "
 }
 
-build_image() {
-  if ! `image_exists $image_name`; then
-    docker build -t $image_name --no-cache=true .
+connect_to_container() {
+  if `container_exists $container_name`; then
+    if ! `container_is_running $container_name`; then
+      docker start $container_name
+    fi
+    docker exec -it $container_name bash
   else
-    echo "Image $image_name already exists. You can delete it with: ./delete_image.sh --name $image_name"
+    echo "You specified a container $container_name that is not created."
+    echo "List of available containers:"
+    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
     exit 1
   fi
 }
 
-image_name=dynawo-travis
+container_name=dynawo-ci
 
 while (($#)); do
   case "$1" in
@@ -40,7 +45,7 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      image_name=$2
+      container_name=$2
       shift 2
       ;;
     *)
@@ -51,4 +56,4 @@ while (($#)); do
   esac
 done
 
-build_image
+connect_to_container

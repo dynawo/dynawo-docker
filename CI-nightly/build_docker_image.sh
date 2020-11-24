@@ -14,27 +14,23 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name -(n)        fedora or bionic (mandatory).
-    --help (-h)        print this message.
+    --name (-n)       fedora or bionic (mandatory)
+    --help (-h)       print this message.
 "
 }
 
-connect_to_container() {
-  if `container_exists $container_name`; then
-    if ! `container_is_running $container_name`; then
-      docker start $container_name
-    fi
-    docker exec -it -u dynawo_travis $container_name bash
+build_image() {
+  if ! `image_exists $image_name`; then
+    docker build -t $image_name --no-cache=true -f Dockerfile.$distrib_name .
   else
-    echo "You specified a container $container_name that is not created."
-    echo "List of available containers:"
-    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
+    echo "Image $image_name already exists. You can delete it with: ./delete_image.sh --name $image_name"
     exit 1
   fi
 }
+
 
 while (($#)); do
   case "$1" in
@@ -65,6 +61,6 @@ if [ -z "$distrib_name" ]; then
   exit 1
 fi
 
-container_name=dynawo-travis-nightly-$distrib_name
+image_name=dynawo-ci-nightly-$distrib_name
 
-connect_to_container
+build_image

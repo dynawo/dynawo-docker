@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname      container name to connect to (default: dynawo-travis)
-    --help (-h)             print this message.
+    --name -(n)        fedora or bionic (mandatory).
+    --help (-h)        print this message.
 "
 }
 
@@ -27,7 +27,7 @@ connect_to_container() {
     if ! `container_is_running $container_name`; then
       docker start $container_name
     fi
-    docker exec -it -u dynawo_travis $container_name bash
+    docker exec -it $container_name bash
   else
     echo "You specified a container $container_name that is not created."
     echo "List of available containers:"
@@ -36,8 +36,6 @@ connect_to_container() {
   fi
 }
 
-container_name=dynawo-travis
-
 while (($#)); do
   case "$1" in
     --help|-h)
@@ -45,8 +43,14 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      container_name=$2
-      shift 2
+      if [ "$2" = "fedora" -o "$2" = "bionic" ]; then
+        distrib_name=$2
+        shift 2
+      else
+        echo "$2: invalid option for name."
+        usage
+        exit 1
+      fi
       ;;
     *)
       echo "$1: invalid option."
@@ -55,5 +59,12 @@ while (($#)); do
       ;;
   esac
 done
+
+if [ -z "$distrib_name" ]; then
+  echo "--name (-n) option is mandatory, with fedora or bionic."
+  exit 1
+fi
+
+container_name=dynawo-ci-nightly-$distrib_name
 
 connect_to_container
