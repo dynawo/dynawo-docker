@@ -108,18 +108,18 @@ RUN apt-get update \
   cmake \
   hwloc \
   openjdk-8-jdk \
-  libblas \
-  liblpsolve55 \
+  libblas3 \
+  liblpsolve55-dev \
   doxygen \
-  liblapack \
+  liblapack3 \
   libexpat1 \
-  libsqlite3 \
+  libsqlite3-0 \
   gettext \
   patch \
   python3 \
   python3-pip \
   libncurses5 \
-  libreadline \
+  libreadline7 \
   libdigest-perl-md5-perl \
   unzip \
   lcov \
