@@ -89,9 +89,9 @@ MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
 RUN dnf upgrade -y \
 && dnf update -y \
 && dnf install -y \
-  blas \
-  lapack \
-  lpsolve \
+  blas-devel \
+  lapack-devel \
+  lpsolve-devel \
   git \
   cmake \
   gcc \
@@ -122,7 +122,7 @@ RUN dnf upgrade -y \
   w3m \
   vim \
   java-1.8.0-openjdk-devel \
-  expat \
+  expat-devel \
   libtool \
   bash-completion \
 && dnf clean all \
