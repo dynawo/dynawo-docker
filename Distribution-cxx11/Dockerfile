@@ -45,9 +45,11 @@ RUN dnf update -y \
   graphviz \
   libcurl-devel \
   bash-completion \
-  zip \
+  zip  \
+&& dnf clean all \
+&& rm -rf /var/cache/dnf/* \
 && curl -L -O https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
-&& tar -xf cmake-3.12.0-Linux-x86_64.tar.gz && \
+&& tar -xf cmake-3.12.0-Linux-x86_64.tar.gz \
 && rm -f cmake-3.12.0-Linux-x86_64.tar.gz
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-3.12.0-Linux-x86_64/bin

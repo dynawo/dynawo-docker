@@ -47,7 +47,9 @@ RUN yum upgrade -y \
   bison \
   chrpath \
   sed \
-  epel-release
+  epel-release \
+&& dnf clean all \
+&& rm -rf /var/cache/dnf/*
 
 RUN yum install -y python-pip python-psutil dpkg
 
