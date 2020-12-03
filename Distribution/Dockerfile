@@ -52,8 +52,8 @@ RUN sed -i 's/mirrorlist/#mirrorlist/' /etc/yum.repos.d/CentOS-Base.repo \
   chrpath \
   sed \
   epel-release \
-&& dnf clean all \
-&& rm -rf /var/cache/dnf/*
+&& yum clean all \
+&& rm -rf /var/cache/yum/*
 
 RUN yum install -y python-pip python-psutil dpkg
 
