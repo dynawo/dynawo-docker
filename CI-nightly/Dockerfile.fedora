@@ -100,12 +100,10 @@ RUN dnf upgrade -y \
   clang \
   llvm-devel \
   make \
-  libarchive-devel \
-  gtest-devel \
-  gmock-devel \
+  libarchive \
   patch \
   wget \
-  boost-devel \
+  boost \
   python \
   python-lxml \
   binutils \
@@ -113,7 +111,7 @@ RUN dnf upgrade -y \
   autoconf \
   automake \
   python-devel \
-  zlib-devel \
+  zlib \
   lcov \
   gem \
   unzip \
