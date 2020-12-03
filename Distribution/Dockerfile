@@ -10,7 +10,11 @@
 FROM centos:6.6
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
-RUN yum upgrade -y \
+RUN sed -i 's/mirrorlist/#mirrorlist/' /etc/yum.repos.d/CentOS-Base.repo \
+&& sed -i 's/#baseurl/baseurl/' /etc/yum.repos.d/CentOS-Base.repo \
+&& sed -i 's|mirror.centos.org/centos|vault.centos.org|' /etc/yum.repos.d/CentOS-Base.repo \
+&& sed -i 's/$releasever/6.6/' /etc/yum.repos.d/CentOS-Base.repo \
+&& yum upgrade -y \
 && yum update -y \
 && yum install -y \
   git \
