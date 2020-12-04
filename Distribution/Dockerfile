@@ -55,7 +55,8 @@ RUN sed -i 's/mirrorlist/#mirrorlist/' /etc/yum.repos.d/CentOS-Base.repo \
 && yum clean all \
 && rm -rf /var/cache/yum/*
 
-RUN yum install -y python-pip python-psutil dpkg
+RUN sed -i 's/https/http/' /etc/yum.repos.d/epel.repo \
+&& yum install -y python-pip python-psutil dpkg
 
 ENV CMAKE_VERSION 3.9.6
 ENV CMAKE_VERSION_SHORT 3.9

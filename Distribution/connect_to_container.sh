@@ -27,7 +27,7 @@ connect_to_container() {
     if ! `container_is_running $container_name`; then
       docker start $container_name
     fi
-    docker exec -it -u dynawo_distribution $container_name bash
+    docker exec -it $container_name bash
   else
     echo "You specified a container $container_name that is not created."
     echo "List of available containers:"
