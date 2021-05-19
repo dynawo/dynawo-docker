@@ -80,7 +80,7 @@ fi
 
 if ! `container_exists $container_name`; then
   if `image_exists $image_name`; then
-    docker run -it -d --name=$container_name \
+    docker run -it -d --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined --name=$container_name \
     $image_name
   else
     echo "You specified an image name that is not existing."

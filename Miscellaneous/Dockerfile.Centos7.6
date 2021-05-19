@@ -50,38 +50,10 @@ RUN yum upgrade -y \
   vim \
   libcurl-devel \
   curl \
+  gdb \
   epel-release
 
 RUN yum install -y python-pip python-psutil dpkg bash-completion
-
-ENV BOOST_VERSION 1_68_0
-
-RUN cd /tmp \
-&& wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_${BOOST_VERSION}.tar.gz \
-&& tar -xzvf boost_${BOOST_VERSION}.tar.gz \
-&& cd boost_${BOOST_VERSION} \
-&& ./bootstrap.sh \
-&& ./b2 install \
-&& echo "/usr/local/lib" > /etc/ld.so.conf.d/boost.conf \
-&& rm -f /tmp/boost_${BOOST_VERSION}.tar.gz \
-&& cd ~ \
-&& rm -rf boost_${BOOST_VERSION}*
-
-ENV GOOGLETEST_VERSION 1.8.1
-
-RUN cd /tmp \
-&& wget https://github.com/google/googletest/archive/release-${GOOGLETEST_VERSION}.tar.gz \
-&& tar -xzvf release-${GOOGLETEST_VERSION}.tar.gz \
-&& cd googletest-release-${GOOGLETEST_VERSION} \
-&& mkdir build \
-&& cd build \
-&& cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCVF_VERSION:STRING=1.9.0 .. \
-&& make \
-&& make install \
-&& echo "/usr/local/lib64" > /etc/ld.so.conf.d/gtest.conf \
-&& rm -f /tmp/release-${GOOGLETEST_VERSION}.tar.gz \
-&& cd ~ \
-&& rm -rf /tmp/googletest-release-${GOOGLETEST_VERSION}*
 
 ENV LCOV_VERSION 1.13
 
@@ -94,18 +66,12 @@ RUN cd /tmp \
 && cd ~ \
 && rm -rf /tmp/lcov-${LCOV_VERSION}*
 
-ENV CMAKE_VERSION 3.9.6
-ENV CMAKE_VERSION_SHORT 3.9
+ENV CMAKE_VERSION 3.12.0
 
-RUN cd /tmp \
-&& wget https://cmake.org/files/v${CMAKE_VERSION_SHORT}/cmake-${CMAKE_VERSION}.tar.gz \
-&& tar xzf cmake-${CMAKE_VERSION}.tar.gz \
-&& cd cmake-${CMAKE_VERSION} \
-&& ./bootstrap --system-curl \
-&& make \
-&& make install \
-&& cd ~ \
-&& rm -rf /tmp/cmake-${CMAKE_VERSION}*
+RUN cd /opt \
+&& curl -LO https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+&& tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+&& rm -f cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz
 
 RUN ldconfig
 
@@ -119,6 +85,8 @@ RUN useradd -l -m -d /home/${USER} --user-group ${USER}
 COPY install_dynawo.sh /opt
 
 WORKDIR /home/${USER}
+
+ENV PATH=/opt/cmake-${CMAKE_VERSION}-Linux-x86_64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
