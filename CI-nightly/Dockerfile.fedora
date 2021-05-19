@@ -123,6 +123,7 @@ RUN dnf upgrade -y \
   expat-devel \
   libtool \
   bash-completion \
+  gdb \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 

@@ -121,6 +121,8 @@ RUN dnf upgrade -y \
   gcovr \
   bash-completion \
   libtool \
+  vim \
+  gdb \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && pip install coverage
