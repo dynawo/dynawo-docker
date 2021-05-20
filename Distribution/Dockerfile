@@ -56,10 +56,10 @@ RUN sed -i 's/mirrorlist/#mirrorlist/' /etc/yum.repos.d/CentOS-Base.repo \
 && rm -rf /var/cache/yum/*
 
 RUN sed -i 's/https/http/' /etc/yum.repos.d/epel.repo \
-&& yum install -y python-pip python-psutil dpkg
+&& yum install -y python-pip python-psutil dpkg && yum clean all
 
 RUN sed -i 's/6.6/6.10/' /etc/yum.repos.d/CentOS-Base.repo \
-&& yum update -y nss
+&& yum update -y nss && yum clean all
 
 ENV CMAKE_VERSION 3.9.6
 ENV CMAKE_VERSION_SHORT 3.9
@@ -74,5 +74,5 @@ RUN cd /tmp \
 && rm -f /tmp/cmake-${CMAKE_VERSION}.tar.gz  \
 && cd ~ \
 && rm -rf /tmp/cmake-${CMAKE_VERSION}*
-
+Distribution/Dockerfile
 CMD ["/bin/bash"]
