@@ -12,7 +12,6 @@ LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 RUN dnf update -y \
 && dnf install -y \
-  git \
   gcc \
   gcc-c++ \
   gcc-gfortran \
@@ -46,11 +45,21 @@ RUN dnf update -y \
   libcurl-devel \
   bash-completion \
   zip  \
+  zlib-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
-&& curl -L -O https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
+&& wget --no-check-certificate https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
 && tar -xf cmake-3.12.0-Linux-x86_64.tar.gz \
-&& rm -f cmake-3.12.0-Linux-x86_64.tar.gz
+&& rm -f cmake-3.12.0-Linux-x86_64.tar.gz \
+&& wget --no-check-certificate https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.29.3.tar.gz \
+&& tar xzf git-2.29.3.tar.gz \
+&& pushd git-2.29.3 \
+&& ./configure \
+&& make \
+&& make install \
+&& popd \
+&& rm -rf git-2.29.3 git-2.29.3.tar.gz \
+&& dnf erase -y zlib-devel
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-3.12.0-Linux-x86_64/bin
 
