@@ -123,6 +123,8 @@ RUN dnf upgrade -y \
   libtool \
   vim \
   gdb \
+  mpich-devel \
+  gperftools-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && pip install coverage
