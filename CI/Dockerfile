@@ -125,6 +125,8 @@ RUN dnf upgrade -y \
   gdb \
   mpich-devel \
   gperftools-devel \
+  doxygen \
+  doxygen-latex \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && pip install coverage
