@@ -21,6 +21,7 @@ This repository contains Dyna&omega;o's Docker images.
 ## Table of Contents
 
 - [About this repository](#about)
+- [Get involved!](#contributions)
 - [User image](#users)
 - [Developer Image](#developer)
 - [License](#license)
@@ -34,6 +35,13 @@ This repository contains Dyna&omega;o's Docker images.
 To achieve this goal, Dyna&omega;o is based on two mains principles: the use of a high-level modeling language Modelica and a strict separation between modeling and solving parts.
 
 We provide this repository to ease users with [Dyna&omega;o' installation](https://github.com/dynawo/dynawo#build) and provide a quick way to try the simulation tool.
+
+<a name="contributions"></a>
+## Get involved!
+
+Dyna&omega;o-docker is an open-source project and as such, questions, discussions, feedbacks and more generally any form of contribution are very welcome and greatly appreciated!
+
+For further informations about contributing guidelines, please refers to the [contributing documentation](https://github.com/dynawo/.github/blob/master/CONTRIBUTING.md).
 
 <a name="users"></a>
 ## User image
