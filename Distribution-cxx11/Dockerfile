@@ -46,6 +46,22 @@ RUN dnf update -y \
   bash-completion \
   zip  \
   zlib-devel \
+  texlive-collection-fontsrecommended \
+  texlive-latex-bin \
+  texlive-babel-english \
+  texlive-titlesec \
+  texlive-tocbibind \
+  texlive-pgfplots \
+  texlive-algorithmicx \
+  texlive-schemabloc \
+  texlive-adjustbox \
+  texlive-multirow \
+  texlive-acronym \
+  texlive-dirtree \
+  texlive-minitoc \
+  texlive-appendix \
+  texlive-pdfpages \
+  texlive-nopageno \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && wget --no-check-certificate https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
