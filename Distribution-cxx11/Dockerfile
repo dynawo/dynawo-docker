@@ -10,6 +10,9 @@
 FROM fedora:22
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
+ENV CMAKE_VERSION 3.14.0
+ENV CMAKE_VERSION_SHORT 3.14
+
 RUN dnf update -y \
 && dnf install -y \
   gcc \
@@ -64,9 +67,9 @@ RUN dnf update -y \
   texlive-nopageno \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
-&& wget --no-check-certificate https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.tar.gz \
-&& tar -xf cmake-3.12.0-Linux-x86_64.tar.gz \
-&& rm -f cmake-3.12.0-Linux-x86_64.tar.gz \
+&& wget --no-check-certificate https://cmake.org/files/v${CMAKE_VERSION_SHORT}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+&& tar -xf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
+&& rm -f cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
 && wget --no-check-certificate https://mirrors.edge.kernel.org/pub/software/scm/git/git-2.29.3.tar.gz \
 && tar xzf git-2.29.3.tar.gz \
 && pushd git-2.29.3 \
@@ -77,6 +80,6 @@ RUN dnf update -y \
 && rm -rf git-2.29.3 git-2.29.3.tar.gz \
 && dnf erase -y zlib-devel
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-3.12.0-Linux-x86_64/bin
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-${CMAKE_VERSION}-Linux-x86_64/bin
 
 CMD ["/bin/bash"]
