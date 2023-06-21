@@ -22,7 +22,7 @@ This repository contains Dyna&omega;o's Docker images.
 - [About this repository](#about)
 - [Get involved!](#contributions)
 - [User image](#users)
-- [Developer Image](#developer)
+- [Developers Image](#developer)
 - [License](#license)
 - [Maintainers](#maintainers)
 - [Links](#links)
@@ -78,9 +78,9 @@ dynawo_user@contaiderID:dynawo$> dynawo nrt
 You can also build your image from sources by following [these instructions](https://github.com/dynawo/dynawo-docker/blob/master/Users/BuildFromSources.md).
 
 <a name="developer"></a>
-## Developer Image
+## Developers Image
 
-Under the [Developer](https://github.com/dynawo/dynawo-docker/tree/master/Developer) folder we provide a Dockerfile to build an image containing all necessary tools to compile Dyna&omega;o. This time the approach is to store the sources on your machine, so that you can use your favorite IDE to develop, and use the container to compile the code.
+Under the [Developers](https://github.com/dynawo/dynawo-docker/tree/master/Developers) folder we provide a Dockerfile to build an image containing all necessary tools to compile Dyna&omega;o. This time the approach is to store the sources on your machine, so that you can use your favorite IDE to develop, and use the container to compile the code.
 
 ### Linux, Unix and Windows Toolbox (with Docker Quickstart Terminal)
 
@@ -88,7 +88,7 @@ First you have to build an image with the following commands:
 
 ``` bash
 $> git clone https://github.com/dynawo/dynawo-docker.git dynawo-docker
-$> cd dynawo-docker/Developer
+$> cd dynawo-docker/Developers
 $> ./build_docker_image.sh
 ```
 
@@ -122,7 +122,7 @@ your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> dynawo help
 This time you need to launch a Windows command line interpreter. You also need to have [Git for Windows](https://git-scm.com/download/win) installed to first checkout this repository. Then execute the following commands to create the image and a container:
 
 ``` bash
-> cd PATH_TO_THIS_REPOSITORY/Developer
+> cd PATH_TO_THIS_REPOSITORY/Developers
 > docker build docker build -t dynawo-dev --no-cache .
 > docker run -it --name=dynawo-dev -v c:/Users/myName:/home/dynawo_developer dynawo-dev
 ```
