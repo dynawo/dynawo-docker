@@ -68,10 +68,9 @@ export DYNAWO_LOCALE=en_GB\n\
 export DYNAWO_RESULTS_SHOW=false\n\
 export DYNAWO_BROWSER=xdg-open\n\
 \n\
-export DYNAWO_NB_PROCESSORS_USED=1\n\
+export DYNAWO_NB_PROCESSORS_USED=2\n\
 \n\
 export DYNAWO_BUILD_TYPE=Debug\n\
-export DYNAWO_CXX11_ENABLED=YES\n\
 \n\
 export DYNAWO_THIRD_PARTY_INSTALL_DIR=/opt/dynawo/3rParty\
 \n\
@@ -80,6 +79,9 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-omcDynawo \
 && rm -rf /opt/OpenModelica/Source \
 && rm -rf /opt/OpenModelica/Install/share \
+&& ./myEnvDynawo.sh build-3rd-party \
+&& sed -i 's/Debug/Release/' myEnvDynawo.sh \
+&& sed -i 's/3rParty/3rPartyRelease/' myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-3rd-party \
 && cd .. \
 && rm -rf dynawo
@@ -133,3 +135,4 @@ RUN dnf upgrade -y \
 
 COPY --from=builder /opt/OpenModelica /opt/OpenModelica
 COPY --from=builder /opt/dynawo/3rParty /opt/dynawo/3rParty
+COPY --from=builder /opt/dynawo/3rParty /opt/dynawo/3rPartyRelease

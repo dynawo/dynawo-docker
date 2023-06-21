@@ -91,10 +91,9 @@ export DYNAWO_LOCALE=en_GB\n\
 export DYNAWO_RESULTS_SHOW=false\n\
 export DYNAWO_BROWSER=xdg-open\n\
 \n\
-export DYNAWO_NB_PROCESSORS_USED=1\n\
+export DYNAWO_NB_PROCESSORS_USED=2\n\
 \n\
 export DYNAWO_BUILD_TYPE=Release\n\
-export DYNAWO_CXX11_ENABLED=YES\n\
 \n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
@@ -102,6 +101,8 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-3rd-party \
 && ./myEnvDynawo.sh build-dynawo \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
+&& sed -i 's/Release/Debug/' myEnvDynawo.sh \
+&& ./myEnvDynawo.sh build-user \
 && rm -rf OpenModelica/Source \
 && rm -rf build \
 && rm -rf OpenModelica/Install/share \
