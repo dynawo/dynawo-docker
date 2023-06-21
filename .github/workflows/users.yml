@@ -1,0 +1,30 @@
+name: Users Image
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron:  "0 22 * * 1-5"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v3
+      - name: docker login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build the Docker image
+        run: |
+          cd Users
+          docker build . --file Dockerfile --tag dynawo/dynawo:latest
+
+      - name: Docker Push
+        run: docker push dynawo/dynawo
