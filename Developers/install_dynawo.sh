@@ -45,7 +45,6 @@ export DYNAWO_BROWSER=firefox
 export DYNAWO_NB_PROCESSORS_USED=1
 
 export DYNAWO_BUILD_TYPE=Release
-export DYNAWO_CXX11_ENABLED=YES
 
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh
   chmod +x myEnvDynawo.sh

@@ -10,7 +10,10 @@
 FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV USER "dynawo_user"
+ARG USER_NAME=dynawo_developer
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+ARG GROUP_NAME=dynawo_developer
 
 RUN dnf upgrade -y \
 && dnf update -y \
@@ -23,6 +26,8 @@ RUN dnf upgrade -y \
   automake \
   make \
   libtool \
+  sudo \
+  passwd \
   cmake \
   hwloc \
   java-1.8.0-openjdk-devel \
@@ -35,11 +40,14 @@ RUN dnf upgrade -y \
   libarchive-devel \
   zlib-devel \
   doxygen \
+  doxygen-latex \
   qt-devel \
   gettext \
   patch \
   wget \
   python-devel \
+  clang \
+  llvm-devel \
   ncurses-devel \
   readline-devel \
   unzip \
@@ -55,29 +63,33 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
-  ca-certificates \
+  graphviz \
   gpg \
   curl \
-  libcurl-devel \
   dpkg \
+  libcurl-devel \
   bash-completion \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
 RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
-&& chmod +x /usr/local/bin/gosu
+  && chmod +x /usr/local/bin/gosu
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-RUN useradd -l -m -d /home/${USER} --user-group ${USER}
+RUN groupadd -f ${GROUP_NAME} -g ${GROUP_ID}
+
+RUN useradd -l -m -d /home/${USER_NAME} ${USER_NAME} -g ${GROUP_ID} -u ${USER_ID}
 
 ADD https://api.github.com/repos/dynawo/dynawo/git/refs/heads/master version.json
 
 RUN cat version.json
 
-USER ${USER}
+USER ${USER_NAME}
 
-WORKDIR /home/${USER}
+COPY install_dynawo.sh /opt
+
+WORKDIR /home/${USER_NAME}
 
 RUN git clone https://github.com/dynawo/dynawo.git dynawo \
 && cd dynawo \
@@ -93,20 +105,53 @@ export DYNAWO_BROWSER=xdg-open\n\
 \n\
 export DYNAWO_NB_PROCESSORS_USED=2\n\
 \n\
-export DYNAWO_BUILD_TYPE=Release\n\
+export DYNAWO_BUILD_TYPE=Debug\n\
 \n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
-&& ./myEnvDynawo.sh build-omcDynawo \
-&& ./myEnvDynawo.sh build-3rd-party \
-&& ./myEnvDynawo.sh build-dynawo \
+&& ./myEnvDynawo.sh build-user \
+&& ./myEnvDynawo.sh deploy \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \
-&& rm -rf build \
 && rm -rf OpenModelica/Install/share \
-&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0
-
-WORKDIR /home/${USER}/dynawo
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
+&& cd .. \
+&& git clone https://github.com/dynawo/dynawo-algorithms.git \
+&& cd dynawo-algorithms \
+&& echo $'#!/bin/bash \n\
+export DYNAWO_ALGORITHMS_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+export DYNAWO_HOME=TO_REPLACE\n\
+\n\
+export DYNAWO_LOCALE=en_GB\n\
+export DYNAWO_RESULTS_SHOW=false\n\
+export DYNAWO_BROWSER=xdg-open\n\
+\n\
+export DYNAWO_NB_PROCESSORS_USED=2\n\
+\n\
+export DYNAWO_BUILD_TYPE=Debug\n\
+\n\
+$DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.sh \
+&& sed -i "s|TO_REPLACE|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDynawoAlgorithms.sh \
+&& chmod +x myEnvDynawoAlgorithms.sh \
+&& ./myEnvDynawoAlgorithms.sh build \
+&& ./myEnvDynawoAlgorithms.sh deploy \
+&& cd .. \
+&& git clone https://github.com/dynawo/dynaflow-launcher.git \
+&& cd dynaflow-launcher \
+&& echo $'#!/bin/bash \n\
+export DYNAFLOW_LAUNCHER_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+export DYNAWO_HOME=TO_REPLACE_A\n\
+export DYNAWO_ALGORITHMS_HOME=TO_REPLACE_B\n\
+\n\
+export DYNAFLOW_LAUNCHER_PROCESSORS_USED=2\n\
+\n\
+export DYNAFLOW_LAUNCHER_BUILD_TYPE=Debug\n\
+\n\
+$DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
+&& sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDFL.sh \
+&& sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc8/shared/dynawo-algorithms|" myEnvDFL.sh \
+&& chmod +x myEnvDFL.sh \
+&& ./myEnvDFL.sh build-user
 
 USER root
 

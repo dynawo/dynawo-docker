@@ -117,6 +117,21 @@ your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> dynawo nrt
 your_user_name@contaiderID:MY_DYNAWO_PATH/dynawo$> dynawo help
 ```
 
+### From Docker Hub
+
+The Developers image is built on Docker Hub and you can use it like this (replace MY_FOLDER below):
+
+``` bash
+$> docker run -it -d --name=dynawo-dev -v MY_FOLDER:/home/dynawo_developer/dynawo dynawo/dynawo-dev
+$> LOCAL_USER_ID=`id -u $USER`
+$> LOCAL_GROUP_ID=`id -g $USER`
+$> docker exec dynawo-dev usermod -u $LOCAL_USER_ID dynawo_developer
+$> docker exec dynawo groupmod -o -g $LOCAL_GROUP_ID dynawo_developer || usermod -g $LOCAL_GROUP_ID dynawo_developer || usermod -a -G $LOCAL_GROUP_ID dynawo_developer
+$> docker exec dynawo-dev chown -R dynawo_developer:dynawo_developer /home/dynawo_developer
+$> docker exec -u dynawo_developer -it dynawo-dev bash
+dynawo_developer@dynawo-dev $> /opt/install_dynawo.sh --prefix /home/dynawo_developer/dynawo
+```
+
 ### Windows Desktop CE for Windows
 
 This time you need to launch a Windows command line interpreter. You also need to have [Git for Windows](https://git-scm.com/download/win) installed to first checkout this repository. Then execute the following commands to create the image and a container:
