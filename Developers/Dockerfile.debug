@@ -149,7 +149,7 @@ export DYNAFLOW_LAUNCHER_BUILD_TYPE=Debug\n\
 \n\
 $DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
 && sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDFL.sh \
-&& sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc8/shared/dynawo-algorithms|" myEnvDFL.sh \
+&& sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc8/dynawo-algorithms|" myEnvDFL.sh \
 && chmod +x myEnvDFL.sh \
 && ./myEnvDFL.sh build-user
 
