@@ -72,9 +72,10 @@ RUN dnf upgrade -y \
   gdb \
   gdb-gdbserver \
 && wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64' -O vscode.rpm \
-&& wget 'https://github.com/microsoft/vscode-cpptools/releases/download/v1.16.3/cpptools-linux.vsix' -O cpptools-linux.vsix \
 && dnf install -y vscode.rpm \
-&& code --install-extension cpptools-linux.vsix \
+&& rm -f vscode.rpm \
+&& cd /opt \
+&& wget 'https://github.com/microsoft/vscode-cpptools/releases/download/v1.16.3/cpptools-linux.vsix' -O cpptools-linux.vsix \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
@@ -159,7 +160,8 @@ $DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
 && sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDFL.sh \
 && sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc8/dynawo-algorithms|" myEnvDFL.sh \
 && chmod +x myEnvDFL.sh \
-&& ./myEnvDFL.sh build-user
+&& ./myEnvDFL.sh build-user \
+&& code --install-extension /opt/cpptools-linux.vsix
 
 USER root
 
