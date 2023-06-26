@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-FROM fedora:29
+FROM fedora:33
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
 ARG USER_NAME=dynawo_developer
@@ -69,6 +69,12 @@ RUN dnf upgrade -y \
   dpkg \
   libcurl-devel \
   bash-completion \
+  gdb \
+  gdb-gdbserver \
+&& wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-rpm-x64' -O vscode.rpm \
+&& wget 'https://github.com/microsoft/vscode-cpptools/releases/download/v1.16.3/cpptools-linux.vsix' -O cpptools-linux.vsix \
+&& dnf install -y vscode.rpm \
+&& code --install-extension cpptools-linux.vsix \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
@@ -110,6 +116,7 @@ export DYNAWO_BUILD_TYPE=Debug\n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-user \
+&& ./myEnvDynawo.sh build-tests \
 && ./myEnvDynawo.sh deploy \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \
@@ -134,6 +141,7 @@ $DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.
 && sed -i "s|TO_REPLACE|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDynawoAlgorithms.sh \
 && chmod +x myEnvDynawoAlgorithms.sh \
 && ./myEnvDynawoAlgorithms.sh build \
+&& ./myEnvDynawoAlgorithms.sh build-tests \
 && ./myEnvDynawoAlgorithms.sh deploy \
 && cd .. \
 && git clone https://github.com/dynawo/dynaflow-launcher.git \
