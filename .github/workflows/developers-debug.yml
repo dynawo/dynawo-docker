@@ -2,6 +2,8 @@ name: Developers Debug Image
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  "0 22 * * 1-5"
 
 defaults:
   run:
