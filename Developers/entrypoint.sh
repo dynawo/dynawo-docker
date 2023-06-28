@@ -11,13 +11,13 @@
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
 
 if [ ! -z "$USER_NAME" ]; then
-  usermod -aG wheel $USER_NAME
-  sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers
+  usermod -aG sudo $USER_NAME
+  sed -i -e 's/%sudo\s\+ALL=(ALL:ALL) ALL/%sudo	ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
   echo 'Defaults    env_keep += "http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY"' >> /etc/sudoers
   exec /usr/local/bin/gosu $USER_NAME "$@"
 elif [ ! -z "$(grep dynawo_developer /etc/passwd)" ]; then
-  usermod -aG wheel dynawo_developer
-  sed -i 's/#.*\(%wheel.*NOPASSWD.*\)/\1/' /etc/sudoers
+  usermod -aG sudo dynawo_developer
+  sed -i -e 's/%sudo\s\+ALL=(ALL:ALL) ALL/%sudo	ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
   echo 'Defaults    env_keep += "http_proxy https_proxy ftp_proxy HTTP_PROXY HTTPS_PROXY no_proxy NO_PROXY"' >> /etc/sudoers
   exec /usr/local/bin/gosu dynawo_developer "$@"
 else
