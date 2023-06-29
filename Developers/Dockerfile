@@ -68,6 +68,11 @@ RUN apt update \
   gdb \
   gdbserver \
   libsecret-1-0 \
+  bash-completion \
+  lynx \
+  libgoogle-perftools4 \
+&& apt -y remove libopenmpi3 \
+&& apt -y install mpich \
 && apt clean \
 && rm -rf /var/lib/apt/lists/*
 

@@ -68,6 +68,11 @@ RUN apt update \
   gdb \
   gdbserver \
   libsecret-1-0 \
+  bash-completion \
+  lynx \
+  libgoogle-perftools4 \
+&& apt -y remove libopenmpi3 \
+&& apt -y install mpich \
 && apt clean \
 && rm -rf /var/lib/apt/lists/* \
 && wget 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64' -O vscode.deb \
@@ -99,7 +104,7 @@ WORKDIR /home/${USER_NAME}
 
 RUN git clone https://github.com/dynawo/dynawo.git dynawo \
 && cd dynawo \
-&& echo $'#!/bin/bash \n\
+&& echo '#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
 \n\
 export DYNAWO_SRC_OPENMODELICA=$DYNAWO_HOME/OpenModelica/Source\n\
@@ -126,7 +131,7 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && cd .. \
 && git clone https://github.com/dynawo/dynawo-algorithms.git \
 && cd dynawo-algorithms \
-&& echo $'#!/bin/bash \n\
+&& echo '#!/bin/bash \n\
 export DYNAWO_ALGORITHMS_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
 export DYNAWO_HOME=TO_REPLACE\n\
 \n\
@@ -140,7 +145,7 @@ export DYNAWO_BUILD_TYPE=Debug\n\
 export DYNAWO_PYTHON_COMMAND=python3\n\
 \n\
 $DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.sh \
-&& sed -i "s|TO_REPLACE|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDynawoAlgorithms.sh \
+&& sed -i "s|TO_REPLACE|/home/${USER_NAME}/dynawo/deploy/gcc9/shared/dynawo|" myEnvDynawoAlgorithms.sh \
 && chmod +x myEnvDynawoAlgorithms.sh \
 && ./myEnvDynawoAlgorithms.sh build \
 && ./myEnvDynawoAlgorithms.sh build-tests \
@@ -148,7 +153,7 @@ $DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.
 && cd .. \
 && git clone https://github.com/dynawo/dynaflow-launcher.git \
 && cd dynaflow-launcher \
-&& echo $'#!/bin/bash \n\
+&& echo '#!/bin/bash \n\
 export DYNAFLOW_LAUNCHER_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
 export DYNAWO_HOME=TO_REPLACE_A\n\
 export DYNAWO_ALGORITHMS_HOME=TO_REPLACE_B\n\
@@ -159,13 +164,14 @@ export DYNAFLOW_LAUNCHER_BUILD_TYPE=Debug\n\
 export DYNAWO_PYTHON_COMMAND=python3\n\
 \n\
 $DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
-&& sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc8/shared/dynawo|" myEnvDFL.sh \
-&& sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc8/dynawo-algorithms|" myEnvDFL.sh \
+&& sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc9/shared/dynawo|" myEnvDFL.sh \
+&& sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc9/dynawo-algorithms|" myEnvDFL.sh \
 && chmod +x myEnvDFL.sh \
 && ./myEnvDFL.sh build-user \
 && code --install-extension /opt/cpptools-linux.vsix \
 && code --install-extension /opt/cmake-tools.vsix \
-&& code --install-extension /opt/cmake-test-adapter-0.17.1.vsix
+&& code --install-extension /opt/cmake-test-adapter-0.17.1.vsix \
+&& rm -f /opt/*.vsix
 
 USER root
 
