@@ -122,7 +122,6 @@ export DYNAWO_PYTHON_COMMAND=python3\n\
 $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && chmod +x myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-user \
-&& ./myEnvDynawo.sh build-tests \
 && ./myEnvDynawo.sh deploy \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \
@@ -148,7 +147,6 @@ $DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.
 && sed -i "s|TO_REPLACE|/home/${USER_NAME}/dynawo/deploy/gcc9/shared/dynawo|" myEnvDynawoAlgorithms.sh \
 && chmod +x myEnvDynawoAlgorithms.sh \
 && ./myEnvDynawoAlgorithms.sh build \
-&& ./myEnvDynawoAlgorithms.sh build-tests \
 && ./myEnvDynawoAlgorithms.sh deploy \
 && cd .. \
 && git clone https://github.com/dynawo/dynaflow-launcher.git \
@@ -167,13 +165,13 @@ $DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
 && sed -i "s|TO_REPLACE_A|/home/${USER_NAME}/dynawo/deploy/gcc9/shared/dynawo|" myEnvDFL.sh \
 && sed -i "s|TO_REPLACE_B|/home/${USER_NAME}/dynawo-algorithms/deploy/gcc9/dynawo-algorithms|" myEnvDFL.sh \
 && chmod +x myEnvDFL.sh \
-&& ./myEnvDFL.sh build-user \
 && code --install-extension /opt/cpptools-linux.vsix \
 && code --install-extension /opt/cmake-tools.vsix \
-&& code --install-extension /opt/cmake-test-adapter-0.17.1.vsix \
-&& rm -f /opt/*.vsix
+&& code --install-extension /opt/cmake-test-adapter-0.17.1.vsix
 
 USER root
+
+RUN rm -f /opt/*.vsix
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
