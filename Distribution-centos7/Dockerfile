@@ -67,6 +67,6 @@ RUN yum upgrade -y \
 
 RUN yum install -y python-pip python-psutil dpkg bash-completion
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-3.12.0-Linux-x86_64/bin
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cmake-${CMAKE_VERSION}-Linux-x86_64/bin
 
 CMD ["/bin/bash"]
