@@ -52,6 +52,7 @@ RUN yum upgrade -y \
   tar \
   xz \
   python-lxml \
+  python3 \
   epel-release \
 && wget --no-check-certificate https://cmake.org/files/v${CMAKE_VERSION_SHORT}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
 && tar -xf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
