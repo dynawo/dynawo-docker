@@ -10,6 +10,8 @@
 FROM ubuntu:20.04
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
+ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
+
 ARG USER_NAME=dynawo_developer
 ARG USER_ID=1000
 ARG GROUP_ID=1000
