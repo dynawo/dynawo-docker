@@ -10,8 +10,6 @@
 FROM fedora:29
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
-
 ENV USER "dynawo_user"
 
 RUN dnf upgrade -y \

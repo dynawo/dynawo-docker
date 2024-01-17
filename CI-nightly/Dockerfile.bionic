@@ -13,8 +13,6 @@ MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
 ENV TZ=Europe/Paris \
 DEBIAN_FRONTEND=noninteractive
 
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
-
 RUN apt-get update \
 && apt-get upgrade -y -q \
 && apt-get install -y git \
