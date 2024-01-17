@@ -10,8 +10,6 @@
 FROM fedora:29 as builder
 MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
-
 RUN dnf upgrade -y \
 && dnf update -y \
 && dnf install -y \
@@ -129,5 +127,3 @@ RUN dnf upgrade -y \
 && rm -rf /var/cache/dnf/*
 
 COPY --from=builder /opt/OpenModelica /opt/OpenModelica
-
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152

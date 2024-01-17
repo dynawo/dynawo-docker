@@ -10,8 +10,6 @@
 FROM fedora:29 as builder
 LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
 
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
-
 RUN dnf upgrade -y \
 && dnf update -y \
 && dnf install -y \
@@ -138,5 +136,3 @@ RUN dnf upgrade -y \
 COPY --from=builder /opt/OpenModelica /opt/OpenModelica
 COPY --from=builder /opt/dynawo/3rParty /opt/dynawo/3rParty
 COPY --from=builder /opt/dynawo/3rParty /opt/dynawo/3rPartyRelease
-
-ENV DYNAWO_ADEPT_DOWNLOAD_URL=https://github.com/dynawo/dynawo/files/13817152
