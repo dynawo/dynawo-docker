@@ -129,6 +129,7 @@ RUN dnf upgrade -y \
   gperftools-devel \
   doxygen \
   doxygen-latex \
+  rsync \
 && dnf clean all \
 && rm -rf /var/cache/dnf/* \
 && pip install coverage
