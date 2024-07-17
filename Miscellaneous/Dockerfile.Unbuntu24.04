@@ -1,0 +1,87 @@
+# Copyright (c) 2024, RTE (http://www.rte-france.com)
+# See AUTHORS.txt
+# All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+# SPDX-License-Identifier: MPL-2.0
+#
+# This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
+FROM ubuntu:24.04
+LABEL maintainer Gautier Bureau "gautier.bureau@rte-france.com"
+
+ENV USER "dynawo_user"
+
+ENV TZ=Europe/Paris \
+DEBIAN_FRONTEND=noninteractive
+
+RUN apt update \
+&& apt upgrade -y -q \
+&& apt install -y git \
+  gcc \
+  g++ \
+  gfortran \
+  autoconf \
+  pkgconf \
+  automake \
+  make \
+  libtool \
+  cmake \
+  hwloc \
+  openjdk-8-jdk \
+  libblas-dev \
+  liblpsolve55-dev \
+  libarchive-dev \
+  doxygen \
+  doxygen-latex \
+  liblapack-dev \
+  libexpat1-dev \
+  libsqlite3-dev \
+  zlib1g-dev \
+  gettext \
+  patch \
+  clang \
+  python3-pip \
+  libncurses5-dev \
+  libreadline-dev \
+  libdigest-perl-md5-perl \
+  unzip \
+  gcovr \
+  lcov \
+  libboost-all-dev \
+  lsb-release \
+  libxml2-utils \
+  python3-lxml \
+  python3-psutil \
+  wget \
+  libcurl4-openssl-dev \
+  rsync \
+  libopenblas-openmp-dev \
+  qtbase5-dev \
+  qtchooser \
+  qt5-qmake \
+  qtbase5-dev-tools \
+  vim \
+  curl \
+  wget \
+  ninja-build \
+  gdb \
+  gdbserver \
+  sudo \
+&& apt clean \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.4/gosu-$(dpkg --print-architecture)" \
+  && chmod +x /usr/local/bin/gosu
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN useradd -l -m -d /home/${USER} --user-group ${USER}
+
+COPY install_dynawo.sh /opt
+
+WORKDIR /home/${USER}
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+CMD ["/bin/bash"]
