@@ -53,22 +53,6 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
-  texlive-collection-fontsrecommended \
-  texlive-latex-bin \
-  texlive-babel-english \
-  texlive-titlesec \
-  texlive-tocbibind \
-  texlive-pgfplots \
-  texlive-algorithmicx \
-  texlive-schemabloc \
-  texlive-adjustbox \
-  texlive-multirow \
-  texlive-acronym \
-  texlive-dirtree \
-  texlive-minitoc \
-  texlive-appendix \
-  texlive-pdfpages \
-  texlive-nopageno \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
@@ -139,6 +123,22 @@ RUN dnf upgrade -y \
   libtool \
   bash-completion \
   gdb \
+  texlive-collection-fontsrecommended \
+  texlive-latex-bin \
+  texlive-babel-english \
+  texlive-titlesec \
+  texlive-tocbibind \
+  texlive-pgfplots \
+  texlive-algorithmicx \
+  texlive-schemabloc \
+  texlive-adjustbox \
+  texlive-multirow \
+  texlive-acronym \
+  texlive-dirtree \
+  texlive-minitoc \
+  texlive-appendix \
+  texlive-pdfpages \
+  texlive-nopageno \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
