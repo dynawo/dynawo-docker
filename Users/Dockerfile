@@ -79,7 +79,9 @@ USER ${USER}
 
 WORKDIR /home/${USER}
 
-RUN git clone https://github.com/dynawo/dynawo.git dynawo \
+RUN mkdir dynawo \
+&& cd dynawo \
+&& git clone https://github.com/dynawo/dynawo.git dynawo \
 && cd dynawo \
 && echo $'#!/bin/bash \n\
 export DYNAWO_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
@@ -102,9 +104,46 @@ $DYNAWO_HOME/util/envDynawo.sh $@' > myEnvDynawo.sh \
 && ./myEnvDynawo.sh build-dynawo \
 && ./myEnvDynawo.sh deploy-autocompletion --deploy \
 && rm -rf OpenModelica/Source \
-&& rm -rf build \
 && rm -rf OpenModelica/Install/share \
-&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0
+&& rm -f OpenModelica/Install/lib/libipopt.so.0.0.0 \
+&& ./myEnvDynawo.sh deploy \
+&& cd .. \
+&& git clone https://github.com/dynawo/dynawo-algorithms.git dynawo-algorithms \
+&& cd dynawo-algorithms \
+&& echo $'#!/bin/bash \n\
+export DYNAWO_ALGORITHMS_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+export DYNAWO_HOME=${HOME}/dynawo/dynawo/deploy/gcc$(gcc -dumpversion)/shared/dynawo\n\
+\n\
+export DYNAWO_LOCALE=en_GB\n\
+export DYNAWO_RESULTS_SHOW=false\n\
+export DYNAWO_BROWSER=xdg-open\n\
+\n\
+export DYNAWO_NB_PROCESSORS_USED=2\n\
+\n\
+export DYNAWO_BUILD_TYPE=Release\n\
+\n\
+$DYNAWO_ALGORITHMS_HOME/util/envDynawoAlgorithms.sh $@' > myEnvDynawoAlgorithms.sh \
+&& chmod +x myEnvDynawoAlgorithms.sh \
+&& ./myEnvDynawoAlgorithms.sh build \
+&& ./myEnvDynawoAlgorithms.sh deploy \
+&& cd .. \
+&& git clone https://github.com/dynawo/dynaflow-launcher.git dynaflow-launcher \
+&& cd dynaflow-launcher \
+&& echo $'#!/bin/bash \n\
+export DYNAFLOW_LAUNCHER_HOME=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)\n\
+export DYNAWO_HOME=${HOME}/dynawo/dynawo/deploy/gcc$(gcc -dumpversion)/shared/dynawo\n\
+export DYNAWO_ALGORITHMS_HOME=${HOME}/dynawo/dynawo-algorithms/deploy/gcc$(gcc -dumpversion)/dynawo-algorithms\n\
+\n\
+export DYNAFLOW_LAUNCHER_PROCESSORS_USED=2\n\
+\n\
+export DYNAFLOW_LAUNCHER_BUILD_TYPE=Release\n\
+\n\
+$DYNAFLOW_LAUNCHER_HOME/scripts/envDFL.sh $@' > myEnvDFL.sh \
+&& chmod +x myEnvDFL.sh \
+&& ./myEnvDFL.sh build-user \
+&& rm -rf dynawo/build \
+&& rm -rf dynawo-algorithms/build \
+&& rm -rf dynaflow-launcher/build
 
 WORKDIR /home/${USER}/dynawo
 
