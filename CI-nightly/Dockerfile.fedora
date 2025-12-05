@@ -53,6 +53,7 @@ RUN dnf upgrade -y \
   xz \
   rsync \
   python-lxml \
+  cppzmq-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 

@@ -71,6 +71,7 @@ RUN apt update \
   bash-completion \
   lynx \
   libgoogle-perftools4 \
+  libzmq3-dev \
 && apt -y remove libopenmpi3 \
 && apt -y install mpich \
 && apt clean \
