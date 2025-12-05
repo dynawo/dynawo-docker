@@ -61,6 +61,7 @@ RUN dnf upgrade -y \
   libcurl-devel \
   dpkg \
   bash-completion \
+  cppzmq-devel \
 && dnf clean all \
 && rm -rf /var/cache/dnf/*
 
