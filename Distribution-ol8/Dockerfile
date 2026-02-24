@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2019, RTE (http://www.rte-france.com)
+# Copyright (c) 2022, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -7,59 +7,49 @@
 # SPDX-License-Identifier: MPL-2.0
 #
 # This file is part of Dynawo, an hybrid C++/Modelica open source time domain simulation tool for power systems.
-FROM ubuntu:bionic as builder
-MAINTAINER Gautier Bureau "gautier.bureau@rte-france.com"
+FROM oraclelinux:8
+LABEL maintainer Florentine Rosiere "florentine.rosiere@rte-france.com"
 
-ENV TZ=Europe/Paris \
-DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update \
-&& apt-get upgrade -y -q \
-&& apt-get install -y git \
+RUN dnf config-manager --set-enabled ol8_codeready_builder \
+&& dnf install -y \
   gcc \
-  g++ \
-  gfortran \
+  gcc-c++ \
+  gcc-gfortran \
   autoconf \
-  pkgconf \
   automake \
   make \
   sudo \
   libtool \
   hwloc \
-  openjdk-8-jdk \
-  libblas-dev \
-  liblpsolve55-dev \
-  libarchive-dev \
+  lapack-devel \
+  blas-devel \
   doxygen \
-  liblapack-dev \
-  libexpat1-dev \
-  libsqlite3-dev \
-  zlib1g-dev \
+  java-1.8.0-openjdk \
+  expat-devel \
+  glibc-devel \
+  sqlite-devel \
   gettext \
   patch \
-  python3 \
-  python3-pip \
-  libncurses5-dev \
-  libreadline-dev \
-  libdigest-perl-md5-perl \
-  unzip \
-  lcov \
-  libboost-all-dev \
-  qt4-qmake \
-  qt4-dev-tools \
-  lsb-release \
-  libxml2-utils \
-  python3-lxml \
-  python3-psutil \
-  vim \
   wget \
-  rsync \
-  libcurl4-openssl-dev \
+  python3-devel \
+  ncurses-devel \
+  readline-devel \
+  unzip \
+  perl-Digest-MD5 \
+  vim \
+  libcurl-devel \
   curl \
-  gdb \
-  libzmq3-dev \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/* \
+  flex \
+  bison \
+  chrpath \
+  sed \
+  tar \
+  xz \
+  python3-lxml \
+  python3 \
+  epel-release \
+  git \
+  lapack \
 && curl -LO https://github.com/Kitware/CMake/releases/download/v3.12.0/cmake-3.12.0-Linux-x86_64.tar.gz \
 && tar xzf cmake-3.12.0-Linux-x86_64.tar.gz \
 && rm -f cmake-3.12.0-Linux-x86_64.tar.gz

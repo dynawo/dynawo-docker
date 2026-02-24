@@ -14,29 +14,15 @@
 source ../Helper/helper.sh
 
 usage() {
-  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
+  echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo image.
 
   where OPTIONS can be one of the following:
-    --name (-n) myname      container name to connect to (default: dynawo-distribution-centos7)
-    --help (-h)             print this message.
+    --name (-n) myname     image name to delete (default: dynawo-distribution-ol8)
+    --help (-h)            print this message.
 "
 }
 
-connect_to_container() {
-  if `container_exists $container_name`; then
-    if ! `container_is_running $container_name`; then
-      docker start $container_name
-    fi
-    docker exec -it $container_name bash
-  else
-    echo "You specified a container $container_name that is not created."
-    echo "List of available containers:"
-    for name in `docker ps -a --format "{{.Names}}"`; do echo "  $name"; done
-    exit 1
-  fi
-}
-
-container_name=dynawo-distribution-centos7
+image_name=dynawo-distribution-ol8
 
 while (($#)); do
   case "$1" in
@@ -45,7 +31,7 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      container_name=$2
+      image_name=$2
       shift 2
       ;;
     *)
@@ -56,4 +42,4 @@ while (($#)); do
   esac
 done
 
-connect_to_container
+delete_image $image_name

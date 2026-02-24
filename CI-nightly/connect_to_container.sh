@@ -17,7 +17,7 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to connect to a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name -(n)        fedora or bionic (mandatory).
+    --name -(n)        fedora or noble (mandatory).
     --help (-h)        print this message.
 "
 }
@@ -43,7 +43,7 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      if [ "$2" = "fedora" -o "$2" = "bionic" ]; then
+      if [ "$2" = "fedora" -o "$2" = "noble" ]; then
         distrib_name=$2
         shift 2
       else
@@ -61,7 +61,7 @@ while (($#)); do
 done
 
 if [ -z "$distrib_name" ]; then
-  echo "--name (-n) option is mandatory, with fedora or bionic."
+  echo "--name (-n) option is mandatory, with fedora or noble."
   exit 1
 fi
 

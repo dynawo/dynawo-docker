@@ -17,8 +17,8 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to create a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --container-name (-n) mycontainer   container name created (default: dynawo-distribution-centos7)
-    --image-name (-i) myimage           image name (default: dynawo-distribution-centos7)
+    --container-name (-n) mycontainer   container name created (default: dynawo-distribution-ol8)
+    --image-name (-i) myimage           image name (default: dynawo-distribution-ol8)
     --help (-h)                         print this message.
 "
 }
@@ -40,8 +40,8 @@ create_container() {
   fi
 }
 
-container_name=dynawo-distribution-centos7
-image_name=dynawo-distribution-centos7
+container_name=dynawo-distribution-ol8
+image_name=dynawo-distribution-ol8
 
 while (($#)); do
   case "$1" in

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2022, RTE (http://www.rte-france.com)
+# Copyright (c) 2026, RTE (http://www.rte-france.com)
 # See AUTHORS.txt
 # All rights reserved.
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -17,12 +17,12 @@ usage() {
   echo -e "Usage: `basename $0` [OPTIONS]\tprogram to delete a Dynawo container.
 
   where OPTIONS can be one of the following:
-    --name -(n) myname      container name to delete (default: dynawo-distribution-centos7)
+    --name -(n)        fedora or noble (mandatory).
     --help (-h)             print this message.
 "
 }
 
-container_name=dynawo-distribution-centos7
+container_name=dynawo-distribution-ol8
 
 while (($#)); do
   case "$1" in
@@ -31,8 +31,14 @@ while (($#)); do
       exit 0
       ;;
     --name|-n)
-      container_name=$2
-      shift 2
+      if [ "$2" = "fedora" -o "$2" = "noble" ]; then
+        distrib_name=$2
+        shift 2
+      else
+        echo "$2: invalid option for name."
+        usagei
+        exit 1
+      fi
       ;;
     *)
       echo "$1: invalid option."
@@ -41,5 +47,13 @@ while (($#)); do
       ;;
   esac
 done
+
+if [ -z "$distrib_name" ]; then
+  echo "--name (-n) option is mandatory, with fedora or noble."
+  exit 1
+fi
+
+container_name=dynawo-ci-nightly-$distrib_name
+image_name=dynawo-ci-nightly-$distrib_name
 
 delete_container $container_name
